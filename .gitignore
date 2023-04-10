@@ -12,6 +12,7 @@
 
 # Package Files #
 *.jar
+!introspector-1.2.jar
 *.war
 *.nar
 *.ear

@@ -6,9 +6,11 @@ import es.uniovi.dlp.parser.PmmLexer;
 import es.uniovi.dlp.parser.PmmParser;
 import es.uniovi.dlp.visitor.IdentificationVisitor;
 import es.uniovi.dlp.visitor.TypeCheckingVisitor;
-import introspector.view.IntrospectorView;
-import org.antlr.v4.runtime.*;
 import introspector.model.IntrospectorModel;
+import introspector.view.IntrospectorView;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 
 public class Main {
@@ -24,7 +26,7 @@ public class Main {
 		PmmLexer lexer = new PmmLexer(input);
 
 		// create a parser that feeds off the tokens buffer
-		CommonTokenStream tokens = new CommonTokenStream(lexer); 
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		PmmParser parser = new PmmParser(tokens);
 		ASTNode ast = parser.program().ast;
 
