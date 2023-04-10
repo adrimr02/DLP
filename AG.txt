@@ -1,0 +1,69 @@
+G = {
+    (1) Arithmetic: expression1 -> expression2 (+|-|*|/) expression3
+    (2) Comparison: expression1 -> expression2 (<|<=|==|>=|>|!=) expression2
+    (3) LogicComparison: expression1 -> expression2 ('||'|&&) expression3
+    (4) UnaryMinus: expression1 -> expression2
+    (5) Not: expression1 -> expression2
+    (6) Cast: expression1 -> type expression2
+    (7) ArrayAccess: expression1 -> expression2 expression3
+    (8) FieldAccess: expression1 -> expression2 ID
+    (9) Function: expression1 -> expression2 expression3*
+    (10) Variable: expression -> ID
+    (11) IntLiteral: expression -> INT_CONSTANT
+    (12) RealLiteral: expression -> REAL_CONSTANT
+    (13) CharLiteral: expression -> CHAR_CONSTANT
+
+    (14) Assignment: statement -> expression1 expression2
+    (15) While: statement1 -> expression statement2*
+    (16) IfElse: statement1 -> expression statement2* statement3*
+    (17) Input: statement -> expression
+    (18) Print: statement -> expression
+    (19) Return: statement -> expression
+
+    (20) FuncDefinition: definition1 -> ID type varDefinition* statement*
+    (21) FunctionType: type -> type varDefinition*
+    (22) VarDefinition: varDefinition -> ID type
+}
+
+A = {
+    expression.type
+}
+
+R = {
+    (1) expression1.type = expression2.type.arithmetic(expression3.type)
+    (2) expression1.type = expression2.type.comparison(expression3.type)
+    (3) expression1.type = expression2.type.logic(expression3.type)
+    (4) expression1.type = expression2.type.arithmetic()
+    (5) expression1.type = expression2.type.logic()
+    (6) expression1.type = expression2.canBeCastTo(type)
+    (7) expression1.type = expression2.type.squareBrackets(expression3.type)
+    (8) expression1.type = expression2.type.dot(ID)
+    (9) expression1.type = expression2.type.parenthesis(exp3*.stream().map(exp->exp.type).toList())
+    (10) expression.type = expression.definition.type
+    (11) expression.type = new IntType()
+    (12) expression.type = new DoubleType()
+    (13) expression.type = new CharType()
+
+    (14) expression1.type.mustBeEqualsTo(expression2.type)
+    (15) expression.type.asLogical()
+    (16) expression.type.asLogical()
+    (17) expression.type.asBuiltInType()
+    (18) expression.type.asBuiltInType()
+    (19) expression.type.mustBeEqualsTo(returnType)
+
+    (20) definition.type = type
+    (21) definition2*.foreach(def -> def.type.asBuiltInType()
+         type.asBuiltInType()
+}
+
+Types (if case not present -> error):
+A           C           L           Cast
+i i -> i    i i -> i    i i -> i    i i -> i
+d d -> d    d d -> i                i d -> d
+c c -> c    c c -> i                i c -> c
+                                    d i -> i
+                                    d d -> d
+                                    d c -> c
+                                    c i -> i
+                                    c d -> d
+                                    c c -> c
