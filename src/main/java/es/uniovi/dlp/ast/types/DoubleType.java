@@ -52,6 +52,11 @@ public class DoubleType extends AbstractType {
   }
 
   @Override
+  public int numberOfBytes() {
+    return 4;
+  }
+
+  @Override
   public <PT, RT> RT accept(Visitor<PT, RT> v, PT param) {
     return v.visit( this, param );
   }

@@ -1,0 +1,22 @@
+- formula offset variables globales
+    para variable n -> n.offset = (n-1).offset + (n-1).type.getNumberOfBytes()
+
+- formula offset variables locales
+    para variable n -> n.offset = BP - ((n-1).offset + n.type.getNumberOfBytes())
+
+- formula offset parametro
+    para parametro n -> n.offset = BP + 4 + (n+1).offset
+        f(4,3.8)
+
+        | VL      |
+        |---------| <-BP
+        | IC (4B) |
+        |---------|
+        | 3.8     |
+        |---------|
+        | 4       |
+        |---------|
+
+- formula offset campos
+    para campo n -> n.offset = (n-1).offset + (n-1).type.getNumberOfBytes()
+    offset relativo al offset del struct

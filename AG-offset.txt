@@ -1,0 +1,40 @@
+P = {
+    (1) FuncDefinition: funcdefinition -> type ID vardefinition* statement*
+    (2) VarDefinition: vardefinition   -> type ID
+    (3) FunctionType: type1            -> type2 vardefinition*
+    (4) Variable: expression           -> ID
+    (5) RecordType: type               -> fields
+    (6) RecordField: field             -> ID type
+}
+
+A = { field.offset, vardefinition.offset } dominio { offset: integer }
+
+G = {
+    (1) int sumaSizeLocales = 0;
+    (2) // int sumaSizeGlobales;
+        // int sumaSizeLocales;
+        if (vardefinition.scope == 0) {
+            vardefinition.offset = sumaSizeGlobales;
+            sumaSizeGlobales += vardefinition.type.numberOfBytes();
+        } else {
+            vardefinition.offset = -(sumaSizeLocales + vardefinition.type.numberOfBypes())
+            sumaSizeLocales += vardefinition.type.numberOfBypes()
+        }
+    (3) int paramBytesSum = 0;
+        for (int i = vardefinition*.size - 1; i >= 0; i--) {
+            VarDefinition vardef = vardefinition*.get(i);
+            vardef.offset = 4 + paramBytesSum;
+            paramBytesSum += vardef.type.numberOfBytes();
+        }
+    (4) int sumaNumberOfBytes = 4;
+        for (vardefinition vdef : vardefinition*) {
+            vdef.offset = sumaNumberOfBytes;
+            sumaNumberOfBytes += vdef.type.numberOfBytes();
+        }
+    (5) int sumaNumberOfBytes = 0;
+        for (field f : field*) {
+            f.offset = sumaNumberOfBytes;
+            sumaNumberOfBytes += f.type.numberOfBytes();
+        }
+    (6)
+}

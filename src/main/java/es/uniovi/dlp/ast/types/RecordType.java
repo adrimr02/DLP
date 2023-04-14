@@ -24,6 +24,15 @@ public class RecordType extends AbstractType {
   }
 
   @Override
+  public int numberOfBytes() {
+    int total = 0;
+    for (var f : fields)
+      total += f.type.numberOfBytes();
+
+    return total;
+  }
+
+  @Override
   public <PT, RT> RT accept(Visitor<PT, RT> v, PT param) {
     return v.visit( this, param );
   }

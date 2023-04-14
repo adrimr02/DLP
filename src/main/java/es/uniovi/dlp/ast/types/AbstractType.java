@@ -87,4 +87,9 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public Type dot(String id, ASTNode astNode) {
         return new ErrorType(this + " does not support field access", astNode.getLine(), astNode.getColumn());
     }
+
+    @Override
+    public int numberOfBytes() {
+        return 0;
+    }
 }

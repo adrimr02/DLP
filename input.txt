@@ -1,25 +1,29 @@
 # Global variables
-i,n:int;
-c:char;
-record:struct {
-  intField:int;
-  realField:double;
-};
+i: int;     #Offset 0
+r: double;  #Offset 2
+c: char;    #Offset 6
+
 # Functions
-def f(a:int, c:double):int {
-  real:double;
-  real = c;
-  if c > 1.0:
-    return (int) c;
-  else: {
-    i = a + n;
-    return i;
-  }
-}
-# Main program
-def main(): {
-  i:int;
-  r:double;
-  print i, f(n,r), record.intField, record.realField;
+def f(pi:int, pr:double): int {	 #Offset pi = BP + 8, pr = BP + 4
+  lr:double;    #Offset BP - 4
+  li:int;		#Offset BP - 6
+  
+  li = pi;
+  lr = pr;
+  return pi;
 }
 
+# Main program
+def main(): {
+  pair: struct {    #Offset BP - 3
+    integer:int;	#Offset 0
+    character:char;	#Offset 2
+  };
+	
+  i = 3;
+  c = 'a';
+  r = 3.8;
+  pair.integer = i;
+  pair.character = c;
+  f(i, r);
+}

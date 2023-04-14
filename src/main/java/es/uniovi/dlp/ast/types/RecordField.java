@@ -7,6 +7,7 @@ public class RecordField extends AbstractASTNode {
   
   public Type type;
   public String name;
+  public int offset;
 
   public RecordField(String name, Type type, int line, int column) {
     super( line, column );

@@ -42,6 +42,7 @@ public class SymbolTable {
 			return false;
 
 		table.get( scope ).put( definition.getName(), definition );
+		definition.setScope( scope );
 		return true;
 	}
 
