@@ -8,21 +8,26 @@ import es.uniovi.dlp.ast.types.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
+public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
 
     /*
      * Definitions
      */
 
     @Override
-    public Void visit(FuncDefinition fDef, Type param) {
+    public Boolean visit(FuncDefinition fDef, Type param) {
         fDef.type.accept( this, param );
+
+        boolean hasReturn = false;
 
         for (var def : fDef.defs)
             def.accept( this, param );
 
-        for (var def : fDef.statements)
-            def.accept( this, ((FunctionType) fDef.type).returnType );
+        for (var stmt : fDef.statements)
+            hasReturn = hasReturn || stmt.accept( this, ((FunctionType) fDef.type).returnType );
+
+        if (!hasReturn && !(((FunctionType) fDef.type).returnType instanceof VoidType))
+            new ErrorType("Missing return statement", fDef.getLine(), fDef.getColumn());
 
         return null;
     }
@@ -31,7 +36,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
      */
 
     @Override
-    public Void visit(Assignment stmt, Type param) {
+    public Boolean visit(Assignment stmt, Type param) {
         stmt.left.accept( this, param );
         stmt.right.accept( this, param );
         if (!stmt.left.getIsLValue())
@@ -40,47 +45,66 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
         if (!stmt.right.getType().equals( stmt.left.getType() ) && (!(stmt.right.getType() instanceof ErrorType) && !(stmt.left.getType() instanceof ErrorType)))
             new ErrorType( incompatibleTypesError(stmt.left.getType(), stmt.right.getType()), stmt.getLine(), stmt.getColumn() );
 
-        return null;
+        return false;
     }
 
     @Override
-    public Void visit(IfElse ifElse, Type param) {
-        super.visit( ifElse, param );
+    public Boolean visit(IfElse ifElse, Type param) {
+        ifElse.condition.accept( this, param );
+
+        boolean ifHasReturn = false;
+        boolean elseHasReturn = false;
+
+        for (var stmt : ifElse.ifBody)
+            ifHasReturn = ifHasReturn || stmt.accept( this, param );
+
+        for (var stmt : ifElse.elseBody)
+            elseHasReturn = elseHasReturn || stmt.accept( this, param );
         ifElse.condition.getType().asLogical( ifElse );
-        return null;
+
+        return ifHasReturn && elseHasReturn;
     }
 
     @Override
-    public Void visit(While whileStmt, Type param) {
-        super.visit( whileStmt, param );
+    public Boolean visit(While whileStmt, Type param) {
+        whileStmt.condition.accept( this, param );
+
+        boolean hasReturn = false;
+
+        for (var stmt : whileStmt.body)
+            hasReturn = hasReturn || stmt.accept( this, param );
+
         whileStmt.condition.getType().asLogical( whileStmt );
-        return null;
+
+        return hasReturn;
     }
 
     @Override
-    public Void visit(Input stmt, Type param) {
+    public Boolean visit(Input stmt, Type param) {
         stmt.expression.accept( this, param );
         if (!stmt.expression.getIsLValue())
             new ErrorType("Variable expected", stmt.getLine(), stmt.getColumn());
 
         stmt.expression.getType().asBuiltInType( stmt );
 
-        return null;
+        return false;
     }
 
     @Override
-    public Void visit(Print stmt, Type param) {
+    public Boolean visit(Print stmt, Type param) {
         stmt.expression.accept( this, param );
         stmt.expression.getType().asBuiltInType( stmt );
-        return null;
+
+        return false;
     }
 
     @Override
-    public Void visit(Return stmt, Type param) {
+    public Boolean visit(Return stmt, Type param) {
         stmt.returnValue.accept( this, param );
         if (!stmt.returnValue.getType().equals( param ))
             new ErrorType( incompatibleTypesError( param, stmt.returnValue.getType() ), stmt.getLine(), stmt.getColumn() );
-        return null;
+
+        return true;
     }
 
     /*
@@ -88,7 +112,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
      */
 
     @Override
-    public Void visit(Function stmt, Type param) {
+    public Boolean visit(Function stmt, Type param) {
         stmt.var.accept( this, param );
         List<Type> paramTypes = new ArrayList<>();
 
@@ -99,11 +123,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
         stmt.setIsLValue( false );
 
         stmt.setType( stmt.var.type.parenthesis( paramTypes, stmt ) );
-        return null;
+        return false;
     }
 
     @Override
-    public Void visit(Arithmetic exp, Type param) {
+    public Boolean visit(Arithmetic exp, Type param) {
         exp.left.accept( this, param );
         exp.right.accept( this, param );
         exp.setIsLValue( false );
@@ -112,7 +136,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
     }
 
     @Override
-    public Void visit(Comparison exp, Type param) {
+    public Boolean visit(Comparison exp, Type param) {
         exp.left.accept( this, param );
         exp.right.accept( this, param );
         exp.setIsLValue( false );
@@ -121,7 +145,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
     }
 
     @Override
-    public Void visit(LogicComparison exp, Type param) {
+    public Boolean visit(LogicComparison exp, Type param) {
         exp.left.accept( this, param );
         exp.right.accept( this, param );
         exp.setIsLValue( false );
@@ -130,7 +154,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
     }
 
     @Override
-    public Void visit(UnaryMinus exp, Type param) {
+    public Boolean visit(UnaryMinus exp, Type param) {
         exp.target.accept( this, param );
         exp.setIsLValue( false );
         exp.setType( exp.target.getType().arithmetic( exp ) );
@@ -138,7 +162,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
     }
 
     @Override
-    public Void visit(Not exp, Type param) {
+    public Boolean visit(Not exp, Type param) {
         exp.target.accept( this, param );
         exp.setIsLValue( false );
         exp.setType( exp.target.getType().logic( exp ) );
@@ -146,7 +170,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
     }
 
     @Override
-    public Void visit(Cast exp, Type param) {
+    public Boolean visit(Cast exp, Type param) {
         exp.target.accept( this, param );
         exp.target.accept( this, param );
         exp.setIsLValue( false );
@@ -155,7 +179,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
     }
 
     @Override
-    public Void visit(ArrayAccess exp, Type param) {
+    public Boolean visit(ArrayAccess exp, Type param) {
         exp.variable.accept( this, param );
         exp.index.accept( this, param );
         exp.setIsLValue( true );
@@ -164,7 +188,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
     }
 
     @Override
-    public Void visit(FieldAccess exp, Type param) {
+    public Boolean visit(FieldAccess exp, Type param) {
         exp.field.accept( this, param );
         exp.setIsLValue( true );
         exp.setType( exp.field.getType().dot( exp.name, exp ) );
@@ -172,28 +196,28 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
     }
 
     @Override
-    public Void visit(IntLiteral exp, Type param) {
+    public Boolean visit(IntLiteral exp, Type param) {
         exp.setIsLValue( false );
         exp.setType( IntType.get() );
         return null;
     }
 
     @Override
-    public Void visit(RealLiteral exp, Type param) {
+    public Boolean visit(RealLiteral exp, Type param) {
         exp.setIsLValue( false );
         exp.setType( DoubleType.get() );
         return null;
     }
 
     @Override
-    public Void visit(CharLiteral exp, Type param) {
+    public Boolean visit(CharLiteral exp, Type param) {
         exp.setIsLValue( false );
         exp.setType( CharType.get() );
         return null;
     }
 
     @Override
-    public Void visit(Variable exp, Type param) {
+    public Boolean visit(Variable exp, Type param) {
         exp.setIsLValue( true );
         exp.setType( exp.definition.getType() );
         return null;
@@ -204,7 +228,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void>{
      */
 
     @Override
-    public Void visit(FunctionType t, Type param) {
+    public Boolean visit(FunctionType t, Type param) {
         for (var arg : t.arguments) {
             arg.accept( this, param );
             arg.type.asBuiltInType( t );

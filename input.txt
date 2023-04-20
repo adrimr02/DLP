@@ -7,10 +7,10 @@ c: char;    #Offset 6
 def f(pi:int, pr:double): int {	 #Offset pi = BP + 8, pr = BP + 4
   lr:double;    #Offset BP - 4
   li:int;		#Offset BP - 6
-  
+
   li = pi;
   lr = pr;
-  return pi;
+  return pi
 }
 
 # Main program
