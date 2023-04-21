@@ -1,29 +1,9 @@
-# Global variables
-i: int;     #Offset 0
-r: double;  #Offset 2
-c: char;    #Offset 6
-
-# Functions
-def f(pi:int, pr:double): int {	 #Offset pi = BP + 8, pr = BP + 4
-  lr:double;    #Offset BP - 4
-  li:int;		#Offset BP - 6
-  
-  li = pi;
-  lr = pr;
-  return pi;
-}
-
-# Main program
-def main(): {
-  pair: struct {    #Offset BP - 3
-    integer:int;	#Offset 0
-    character:char;	#Offset 2
-  };
-	
-  i = 3;
-  c = 'a';
-  r = 3.8;
-  pair.integer = i;
-  pair.character = c;
-  f(i, r);
-}
+#source "input.txt"
+call main
+halt
+' * Global variables
+' * Character c (offset: 0)
+' * Integer i (offset: 1)
+' * Double r (offset: 3)
+main:
+' * Parameters

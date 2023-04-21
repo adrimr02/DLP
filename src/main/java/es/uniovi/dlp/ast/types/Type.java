@@ -20,4 +20,6 @@ public interface Type extends ASTNode {
 
     int numberOfBytes();
 
+    char getSuffix();
+
 }

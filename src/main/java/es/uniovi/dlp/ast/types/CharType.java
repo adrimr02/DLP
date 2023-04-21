@@ -61,4 +61,8 @@ public class CharType extends AbstractType {
     return "Character";
   }
 
+  @Override
+  public char getSuffix() {
+    return 'b';
+  }
 }

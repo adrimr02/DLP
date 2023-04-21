@@ -1,4 +1,4 @@
-Generar el codigo MAPL para
+Generate MAPL code for:
 - Programs
 - Input statements
 - Print statements

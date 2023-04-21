@@ -1,0 +1,131 @@
+execute[[Program: program -> definition*]]() =
+    <call main>
+    <halt>
+    ' * Global Variables
+    for (Definition def : definition*)
+        if (def instanceof VarDefinition)
+            execute[[def]]();
+
+    for (Definition def : definition*)
+        if (def instanceof FuncDefinition)
+            execute[[def]]();
+
+execute[[VarDefinition: vardefinition -> type ID]]() =
+    ' * type ID (offset: vardefinition.offset)
+
+execute[[FuncDefinition: funcdefinition -> type ID vardefinition* statement*]]() =
+    ID:
+    ' * Parameters
+    execute[[type]]()
+    ' * Local Variables
+    vardefinition*.foreach(vardef -> execute[[vardef]]())
+    if (vardefinition*.size() > 0)
+        <enter> -vardefinition*.get(vardefinition.size() - 1).offset
+
+execute[[FunctionType: type -> type1 vardefinition*]]() =
+    vardefinition*.foreach(vardef -> execute[[vardef]]())
+
+execute[[Print: statement -> expression]]() =
+    value[[expression]]()
+    <out> expression.type.suffix()
+
+execute[[Input: statement -> expression]]() =
+    address[[expression]]()
+    <in> expression.type.suffix()
+    <store> expression.type.suffix()
+
+execute[[Assignment: statement -> expression1 expression2]]() =
+    address[[expression1]]
+    value[[expression2]]
+    <store> expression2.type.suffix()
+
+address[[Variable: expression -> ID]]() =
+    if (expression.definition.scope==0)
+        <pusha> expression.definition.offset
+    else
+        <push bp>
+        <pushi> expression.definition.offset
+        <addi>
+
+value[[Variable: expression -> ID]]() =
+    address[[expression]]()
+    <load> expression.type.suffix()
+
+value[[IntLiteral: expression -> INT_CONSTANT]]() =
+    <pushi> INT_CONSTANT
+
+value[[DoubleLiteral: expression -> REAL_CONSTANT]]() =
+    <pushi> INT_CONSTANT
+
+value[[CharLiteral: expression -> CHAR_CONSTANT]]() =
+    <pushi> INT_CONSTANT
+
+value[[Arithmetic: expression -> expression1 (+|-|*|/|%) expression2]]() =
+    value[[expression1]]()
+    value[[expression2]]()
+    switch (expression.operator) {
+        case "+":
+            <add> expression.type.suffix()
+            break;
+        case "-":
+            <sub> expression.type.suffix()
+            break;
+        case "*":
+            <mul> expression.type.suffix()
+            break;
+        case "/":
+            <div> expression.type.suffix()
+            break;
+        case "%":
+            <mod> expression.type.suffix()
+            break;
+    }
+
+value[[UnaryMinus: expression -> expression1]]() =
+    <push> expression.type.suffix() <0>
+    value[[expression1]]()
+    <sub> expression.type.suffix()
+
+value[[Comparison: expression -> expression1 (<|<=|==|>=|>|!=) expression2]]() =
+    value[[expression1]]()
+    value[[expression2]]()
+    switch (expression.operator) {
+        case "<":
+            <lt> expression.type.suffix()
+            break;
+        case "<=":
+            <le> expression.type.suffix()
+            break;
+        case "==":
+            <eq> expression.type.suffix()
+            break;
+        case ">=":
+            <ge> expression.type.suffix()
+            break;
+        case ">":
+            <gt> expression.type.suffix()
+            break;
+        case "!=":
+            <ne> expression.type.suffix()
+            break;
+    }
+
+value[[LogicComparison: expression -> expression1 (&&|'||') expression2]]() =
+    value[[expression1]]()
+    value[[expression2]]()
+    switch (expression.operator) {
+        case "&&":
+            <and>
+            break;
+        case "||":
+            <or>
+            break;
+    }
+
+value[[Not: expression -> expression1]]() =
+    value[[expression1]]()
+    <not>
+
+value[[Cast: expression -> type expression1]]() =
+    value[[expression1]]()
+    expression1.type.suffix()<2>type.suffix()

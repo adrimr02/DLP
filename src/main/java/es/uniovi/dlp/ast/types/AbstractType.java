@@ -92,4 +92,9 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public int numberOfBytes() {
         return 0;
     }
+
+    @Override
+    public char getSuffix() {
+        throw new IllegalStateException("Suffix is only available for built-in types");
+    }
 }

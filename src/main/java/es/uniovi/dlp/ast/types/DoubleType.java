@@ -66,4 +66,9 @@ public class DoubleType extends AbstractType {
     return "Double";
   }
 
+  @Override
+  public char getSuffix() {
+    return 'f';
+  }
+
 }

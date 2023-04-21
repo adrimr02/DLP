@@ -17,4 +17,8 @@ public class VarDefinition extends AbstractDefinition {
     return v.visit( this, param );
   }
 
+  public String toString() {
+    return type + " " + name + " (offset: " + offset + ")";
+  }
+
 }

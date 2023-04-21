@@ -82,4 +82,9 @@ public class IntType extends AbstractType {
     return "Integer";
   }
 
+  @Override
+  public char getSuffix() {
+    return 'i';
+  }
+
 }
