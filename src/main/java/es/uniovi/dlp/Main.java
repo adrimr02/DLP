@@ -42,7 +42,9 @@ public class Main {
 		else{
 			// * The AST is shown
 			ast.accept(new OffSetVisitor(),null);
-			ast.accept(new ExecuteCGVisitor(new CodeGenerator(args[1], args[0])), null);
+			CodeGenerator cg = new CodeGenerator(args[0], args[1]);
+			ast.accept(new ExecuteCGVisitor(cg), null);
+			cg.close();
 			//IntrospectorModel model=new IntrospectorModel("Program", ast);
 			//new IntrospectorView("Introspector", model);
 		}

@@ -1,9 +1,28 @@
-#source "input.txt"
-call main
-halt
-' * Global variables
-' * Character c (offset: 0)
-' * Integer i (offset: 1)
-' * Double r (offset: 3)
-main:
-' * Parameters
+c: char;
+i: int;
+r: double;
+
+def main(): {
+	a, i:int;
+	
+	c='a';
+	print c,'\n';
+
+	a=1;
+	i=(int)'0'*3;
+	print a, ' ', i, '\n';
+		
+	input r;
+	print (double)2*r, '\n';
+	
+	print (double)3-4.5, ' ', 
+            (double)'0'/48.0, ' ',
+            (int)'0'%(int)'1', ' ',
+            0+(int)'1', '\n';
+	print 1<2, ' ',
+	      4>=3, ' ',
+	      5==5, ' ',
+	      1&&2, ' ',
+	      0||3, ' ',
+	      !0, '\n';
+}
