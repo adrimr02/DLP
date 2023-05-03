@@ -42,8 +42,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
         if (!stmt.left.getIsLValue())
             new ErrorType("Variable expected", stmt.getLine(), stmt.getColumn());
 
-        if (!stmt.right.getType().equals( stmt.left.getType() ) && (!(stmt.right.getType() instanceof ErrorType) && !(stmt.left.getType() instanceof ErrorType)))
-            new ErrorType( incompatibleTypesError(stmt.left.getType(), stmt.right.getType()), stmt.getLine(), stmt.getColumn() );
+        stmt.left.setType( stmt.right.getType().promotesTo( stmt.left.getType(), stmt ) );
+
+        stmt.right.getType().asBuiltInType( stmt );
 
         return false;
     }
@@ -101,8 +102,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
     @Override
     public Boolean visit(Return stmt, Type param) {
         stmt.returnValue.accept( this, param );
-        if (!stmt.returnValue.getType().equals( param ))
-            new ErrorType( incompatibleTypesError( param, stmt.returnValue.getType() ), stmt.getLine(), stmt.getColumn() );
+
+        stmt.returnValue.getType().promotesTo( param, stmt );
 
         return true;
     }
@@ -120,6 +121,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
             p.accept( this, param );
             paramTypes.add( p.getType() );
         }
+
         stmt.setIsLValue( false );
 
         stmt.setType( stmt.var.type.parenthesis( paramTypes, stmt ) );

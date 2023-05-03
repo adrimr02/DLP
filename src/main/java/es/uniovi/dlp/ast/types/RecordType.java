@@ -32,6 +32,10 @@ public class RecordType extends AbstractType {
     return total;
   }
 
+  public RecordField getField(String name) {
+    return fields.stream().filter( f -> f.name.equals( name ) ).findFirst().orElse( null );
+  }
+
   @Override
   public <PT, RT> RT accept(Visitor<PT, RT> v, PT param) {
     return v.visit( this, param );

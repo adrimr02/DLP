@@ -44,7 +44,7 @@ R = {
     (12) expression.type = new DoubleType()
     (13) expression.type = new CharType()
 
-    (14) expression1.type.mustBeEqualsTo(expression2.type)
+    (14) expression1.type.promotesTo(expression2.type)
     (15) expression.type.asLogical()
     (16) expression.type.asLogical()
     (17) expression.type.asBuiltInType()

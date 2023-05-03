@@ -1,12 +1,9 @@
 package es.uniovi.dlp.visitor;
 
 import es.uniovi.dlp.ast.Program;
-import es.uniovi.dlp.ast.definitions.Definition;
 import es.uniovi.dlp.ast.definitions.FuncDefinition;
 import es.uniovi.dlp.ast.definitions.VarDefinition;
-import es.uniovi.dlp.ast.statements.Assignment;
-import es.uniovi.dlp.ast.statements.Input;
-import es.uniovi.dlp.ast.statements.Print;
+import es.uniovi.dlp.ast.statements.*;
 import es.uniovi.dlp.ast.types.FunctionType;
 import es.uniovi.dlp.ast.types.VoidType;
 import es.uniovi.dlp.util.CodeGenerator;
@@ -46,7 +43,6 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     public Void visit(FuncDefinition fdef, Void param) {
-        cg.debugLine(fdef.getLine());
         cg.label( fdef.name );
         cg.comment( "* Parameters");
         fdef.type.accept( this, param );
@@ -65,7 +61,6 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         }
 
         for (var stmt :  fdef.statements) {
-            cg.debugLine(stmt.getLine());
             stmt.accept(this, param);
         }
 
@@ -84,7 +79,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     public Void visit(Assignment stmt, Void param) {
-
+        cg.debugLine(stmt.getLine());
         stmt.left.accept( this.av, param );
         stmt.right.accept( this.vv, param );
 
@@ -94,7 +89,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     public Void visit(Input stmt, Void param) {
-
+        cg.debugLine(stmt.getLine());
         stmt.expression.accept(this.av, param);
         cg.in(stmt.expression.getType().getSuffix());
         cg.store(stmt.expression.getType().getSuffix());
@@ -104,10 +99,50 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(Print stmt, Void param) {
-
+        cg.debugLine(stmt.getLine());
         stmt.expression.accept(this.vv, param);
         cg.out(stmt.expression.getType().getSuffix());
 
+        return null;
+    }
+
+    @Override
+    public Void visit(IfElse ifElse, Void param) {
+        cg.debugLine(ifElse.getLine());
+        int labels = cg.getLabels(2);
+        int elseL = labels + 1;
+        int endL = labels + 2;
+
+        ifElse.condition.accept( vv, param );
+        cg.jz("label"+elseL);
+        for (var stmt : ifElse.ifBody)
+            stmt.accept( this, param );
+
+        cg.jump( "label"+endL );
+        cg.label( "label"+elseL );
+        for (var stmt : ifElse.elseBody)
+            stmt.accept( this, param );
+
+        cg.label( "label"+endL );
+        return null;
+    }
+
+    @Override
+    public Void visit(While whileStmt, Void param) {
+        cg.debugLine(whileStmt.getLine());
+        int labels = cg.getLabels(2);
+        int conditionL = labels + 1;
+        int endL = labels + 2;
+
+        cg.label( "label"+conditionL );
+        whileStmt.condition.accept( vv, param );
+        cg.jz("label"+endL);
+        for (var stmt : whileStmt.body)
+            stmt.accept( this, param );
+
+        cg.jump( "label"+conditionL );
+
+        cg.label( "label"+endL );
         return null;
     }
 }

@@ -52,6 +52,14 @@ public class CharType extends AbstractType {
   }
 
   @Override
+  public Type promotesTo(Type type, ASTNode astNode) {
+    if (type instanceof CharType || type instanceof ErrorType)
+      return type;
+
+    return new ErrorType(this + " is not assignable to " + type, astNode.getLine(), astNode.getColumn());
+  }
+
+  @Override
   public int numberOfBytes() {
     return 1;
   }

@@ -17,6 +17,7 @@ public interface Type extends ASTNode {
     Type canBeCastTo(Type type, ASTNode astNode);
     Type squareBrackets(Type type, ASTNode astNode);
     Type dot(String id, ASTNode astNode);
+    Type promotesTo(Type type, ASTNode astNode);
 
     int numberOfBytes();
 

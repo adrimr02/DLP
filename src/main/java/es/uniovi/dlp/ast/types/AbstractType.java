@@ -97,4 +97,12 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public char getSuffix() {
         throw new IllegalStateException("Suffix is only available for built-in types");
     }
+
+    @Override
+    public Type promotesTo(Type type, ASTNode astNode) {
+        if (type instanceof ErrorType)
+            return type;
+
+        return new ErrorType(this + " is not assignable to " + type, astNode.getLine(), astNode.getColumn());
+    }
 }

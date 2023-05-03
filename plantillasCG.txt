@@ -41,6 +41,30 @@ execute[[Assignment: statement -> expression1 expression2]]() =
     value[[expression2]]
     <store> expression2.type.suffix()
 
+
+execute[[WhileStatement: statement -> expression statement*]]() =
+    int labels = cg.getLabels(2)
+    int condition = labels + 1
+    int end = labels + 2
+    <label> condition <:>
+    value[[expression]]()
+    <jz label> end
+    statement*.foreach(stmt -> execute[[stmt]]())
+    <jump label> condition
+    <label> end <:>
+
+execute[[IfElseStatement: statement -> expression statement1* statement2*]]() =
+    int labels = cg.getLabels(2)
+    int else = labels + 1
+    int end = labels + 2
+    value[[expression]]()
+    <jz label> else
+    statement1*.foreach(stmt -> execute[[stmt]]())
+    <jump label> end
+    <label> else <:>
+    statement2*.foreach(stmt -> execute[[stmt]]())
+    <label> end <:>
+
 address[[Variable: expression -> ID]]() =
     if (expression.definition.scope==0)
         <pusha> expression.definition.offset
@@ -48,6 +72,18 @@ address[[Variable: expression -> ID]]() =
         <push bp>
         <pushi> expression.definition.offset
         <addi>
+
+address[[ArrayAccess: expression1 -> expression2 expression3]]() =
+    address[[expression2]]()
+    value[[expression3]]()
+    <pushi> expression1.type.numberOfBytes()
+    <muli>
+    <addi>
+
+address[[FieldAccess: expression1 -> expression2 ID]]() =
+    address[[expression2]]()
+    <pushi> expression2.type.getField(expression1.fieldName).offset
+    <addi>
 
 value[[Variable: expression -> ID]]() =
     address[[expression]]()
@@ -83,10 +119,10 @@ value[[Arithmetic: expression -> expression1 (+|-|*|/|%) expression2]]() =
             break;
     }
 
-value[[UnaryMinus: expression -> expression1]]() =
-    <push> expression.type.suffix() <0>
-    value[[expression1]]()
-    <sub> expression.type.suffix()
+value[[UnaryMinus: expression1 -> expression2]]() =
+    <push> expression1.type.suffix() <0>
+    value[[expression2]]()
+    <sub> expression1.type.suffix()
 
 value[[Comparison: expression -> expression1 (<|<=|==|>=|>|!=) expression2]]() =
     value[[expression1]]()
@@ -131,3 +167,11 @@ value[[Not: expression -> expression1]]() =
 value[[Cast: expression -> type expression1]]() =
     value[[expression1]]()
     expression1.type.suffix()<2>type.suffix()
+
+value[[ArrayAccess: expression1 -> expression2 expression3]]() =
+    address[[expression1]]()
+    <load> expression.type.suffix()
+
+value[[Access: expression1 -> expression2 expression3]]() =
+    address[[expression1]]()
+    <load> expression.type.suffix()

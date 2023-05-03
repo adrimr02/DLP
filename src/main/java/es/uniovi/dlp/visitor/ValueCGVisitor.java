@@ -1,8 +1,11 @@
 package es.uniovi.dlp.visitor;
 
+import com.sun.jdi.CharType;
+import com.sun.jdi.DoubleType;
 import es.uniovi.dlp.ast.expressions.*;
-import es.uniovi.dlp.ast.types.CharType;
-import es.uniovi.dlp.ast.types.DoubleType;
+import es.uniovi.dlp.ast.types.ArrayType;
+import es.uniovi.dlp.ast.types.RecordField;
+import es.uniovi.dlp.ast.types.RecordType;
 import es.uniovi.dlp.util.CodeGenerator;
 
 public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
@@ -115,6 +118,22 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Variable exp, Void param) {
 
+        exp.accept(this.av, param);
+        cg.load(exp.type.getSuffix());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(ArrayAccess exp, Void param) {
+        exp.accept(this.av, param);
+        cg.load(exp.type.getSuffix());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(FieldAccess exp, Void param) {
         exp.accept(this.av, param);
         cg.load(exp.type.getSuffix());
 

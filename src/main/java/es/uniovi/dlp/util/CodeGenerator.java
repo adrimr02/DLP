@@ -12,7 +12,7 @@ public class CodeGenerator {
     public CodeGenerator(String inputPath, String outputPath) {
         try {
             this.out = new PrintWriter( outputPath );
-            heading( outputPath );
+            heading( inputPath );
         } catch (IOException e) {
             System.err.println("Error opening file: " + outputPath);
             System.exit( -1 );
@@ -20,8 +20,9 @@ public class CodeGenerator {
     }
 
     public int getLabels(int number) {
+        int currentLabels = labels;
         labels += number;
-        return labels;
+        return currentLabels;
     }
 
     public void heading(String source) {
@@ -96,11 +97,6 @@ public class CodeGenerator {
 
     public void load(char suffix) {
         write("load"+suffix);
-        enter();
-    }
-
-    public void debugLine(int line) {
-        write("#line " + line);
         enter();
     }
 
@@ -179,8 +175,23 @@ public class CodeGenerator {
         enter();
     }
 
+    public void jump(String label) {
+        write( "jmp " + label );
+        enter();
+    }
+
+    public void jz(String label) {
+        write( "jz " + label );
+        enter();
+    }
+
     public void comment(String comment) {
         write( "' " + comment );
+        enter();
+    }
+
+    public void debugLine(int line) {
+        write("#line " + line);
         enter();
     }
 

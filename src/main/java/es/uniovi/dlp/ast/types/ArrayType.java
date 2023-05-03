@@ -24,6 +24,8 @@ public class ArrayType extends AbstractType {
       return new ErrorType( "Array index must be of type integer", astNode.getLine(), astNode.getColumn() );
   }
 
+
+
   @Override
   public <PT, RT> RT accept(Visitor<PT, RT> v, PT param) {
     return v.visit( this, param );
