@@ -1,11 +1,9 @@
 package es.uniovi.dlp.visitor;
 
-import com.sun.jdi.CharType;
 import com.sun.jdi.DoubleType;
 import es.uniovi.dlp.ast.expressions.*;
-import es.uniovi.dlp.ast.types.ArrayType;
-import es.uniovi.dlp.ast.types.RecordField;
-import es.uniovi.dlp.ast.types.RecordType;
+import es.uniovi.dlp.ast.statements.Function;
+import es.uniovi.dlp.ast.types.*;
 import es.uniovi.dlp.util.CodeGenerator;
 
 public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
@@ -20,7 +18,13 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Arithmetic exp, Void param) {
         exp.left.accept(this, param);
+        if (exp.left.getType() instanceof CharType)
+            cg.convert( exp.left.getType(), IntType.get() );
+
         exp.right.accept(this, param);
+        if (exp.right.getType() instanceof CharType)
+            cg.convert( exp.right.getType(), IntType.get() );
+
         switch (exp.operator) {
             case "+" -> cg.add(exp.type.getSuffix());
             case "-" -> cg.sub(exp.type.getSuffix());
@@ -36,6 +40,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(Comparison exp, Void param) {
         exp.left.accept(this, param);
         exp.right.accept(this, param);
+
         switch (exp.operator) {
             case "<" -> cg.lt(exp.type.getSuffix());
             case "<=" -> cg.le(exp.type.getSuffix());
@@ -83,13 +88,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Cast exp, Void param) {
         exp.target.accept(this, param);
-        if (exp.target.getType() instanceof CharType && exp.type instanceof DoubleType
-                || exp.target.getType() instanceof DoubleType && exp.type instanceof CharType) {
-            cg.cast(exp.target.getType().getSuffix(), 'i');
-            cg.cast('i', exp.type.getSuffix());
-        } else {
-            cg.cast(exp.target.getType().getSuffix(), exp.type.getSuffix());
-        }
+        cg.convert(exp.target.getType(), exp.type);
 
         return null;
     }
@@ -137,6 +136,15 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
         exp.accept(this.av, param);
         cg.load(exp.type.getSuffix());
 
+        return null;
+    }
+
+    @Override
+    public Void visit(Function stmt, Void param) {
+        for (var arg : stmt.params) {
+            arg.accept( this, param );
+        }
+        cg.call( stmt.var.name );
         return null;
     }
 }

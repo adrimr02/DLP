@@ -8,7 +8,7 @@ import es.uniovi.dlp.ast.types.FunctionType;
 import es.uniovi.dlp.ast.types.VoidType;
 import es.uniovi.dlp.util.CodeGenerator;
 
-public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
+public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
 
     private final AddressCGVisitor av;
     private final ValueCGVisitor vv;
@@ -19,7 +19,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         vv = new ValueCGVisitor( cg, av );
     }
 
-    public Void visit(Program program, Void param) {
+    public Void visit(Program program, FuncDefinition param) {
 
         cg.call( "main" );
         cg.halt();
@@ -37,12 +37,12 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
-    public Void visit(VarDefinition vdef, Void param) {
+    public Void visit(VarDefinition vdef, FuncDefinition param) {
         cg.comment( "* " + vdef);
         return null;
     }
 
-    public Void visit(FuncDefinition fdef, Void param) {
+    public Void visit(FuncDefinition fdef, FuncDefinition param) {
         cg.label( fdef.name );
         cg.comment( "* Parameters");
         fdef.type.accept( this, param );
@@ -52,7 +52,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
         for (var def : fdef.defs) {
             cg.debugLine(def.getLine());
-            def.accept( this, param );
+            def.accept( this, fdef );
         }
 
         if (fdef.defs.size() > 0) {
@@ -61,7 +61,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         }
 
         for (var stmt :  fdef.statements) {
-            stmt.accept(this, param);
+            stmt.accept(this, fdef);
         }
 
         if (((FunctionType) fdef.type).returnType instanceof VoidType)
@@ -70,7 +70,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
-    public Void visit(FunctionType type, Void param) {
+    public Void visit(FunctionType type, FuncDefinition param) {
 
         for (var arg : type.arguments)
             arg.accept( this, param );
@@ -78,19 +78,19 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
-    public Void visit(Assignment stmt, Void param) {
+    public Void visit(Assignment stmt, FuncDefinition param) {
         cg.debugLine(stmt.getLine());
-        stmt.left.accept( this.av, param );
-        stmt.right.accept( this.vv, param );
+        stmt.left.accept( this.av, null );
+        stmt.right.accept( this.vv, null );
 
         cg.store(stmt.left.getType().getSuffix());
 
         return null;
     }
 
-    public Void visit(Input stmt, Void param) {
+    public Void visit(Input stmt, FuncDefinition param) {
         cg.debugLine(stmt.getLine());
-        stmt.expression.accept(this.av, param);
+        stmt.expression.accept(this.av, null);
         cg.in(stmt.expression.getType().getSuffix());
         cg.store(stmt.expression.getType().getSuffix());
 
@@ -98,22 +98,22 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(Print stmt, Void param) {
+    public Void visit(Print stmt, FuncDefinition param) {
         cg.debugLine(stmt.getLine());
-        stmt.expression.accept(this.vv, param);
+        stmt.expression.accept(this.vv, null);
         cg.out(stmt.expression.getType().getSuffix());
 
         return null;
     }
 
     @Override
-    public Void visit(IfElse ifElse, Void param) {
+    public Void visit(IfElse ifElse, FuncDefinition param) {
         cg.debugLine(ifElse.getLine());
         int labels = cg.getLabels(2);
         int elseL = labels + 1;
         int endL = labels + 2;
 
-        ifElse.condition.accept( vv, param );
+        ifElse.condition.accept( vv, null );
         cg.jz("label"+elseL);
         for (var stmt : ifElse.ifBody)
             stmt.accept( this, param );
@@ -128,14 +128,14 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(While whileStmt, Void param) {
+    public Void visit(While whileStmt, FuncDefinition param) {
         cg.debugLine(whileStmt.getLine());
         int labels = cg.getLabels(2);
         int conditionL = labels + 1;
         int endL = labels + 2;
 
         cg.label( "label"+conditionL );
-        whileStmt.condition.accept( vv, param );
+        whileStmt.condition.accept( vv, null );
         cg.jz("label"+endL);
         for (var stmt : whileStmt.body)
             stmt.accept( this, param );
@@ -143,6 +143,23 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         cg.jump( "label"+conditionL );
 
         cg.label( "label"+endL );
+        return null;
+    }
+
+    @Override
+    public Void visit(Function stmt, FuncDefinition param) {
+        cg.debugLine(stmt.getLine());
+        stmt.accept( vv, null );
+        if (!(stmt.type instanceof VoidType))
+            cg.pop(stmt.type.getSuffix());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(Return stmt, FuncDefinition param) {
+        cg.debugLine(stmt.getLine());
+        cg.ret( stmt.returnValue.getType().numberOfBytes(), param.bytesLocalsSum, ((FunctionType)param.type).bytesParamsSum);
         return null;
     }
 }

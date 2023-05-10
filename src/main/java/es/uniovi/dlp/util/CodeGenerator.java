@@ -1,5 +1,9 @@
 package es.uniovi.dlp.util;
 
+import es.uniovi.dlp.ast.types.CharType;
+import es.uniovi.dlp.ast.types.DoubleType;
+import es.uniovi.dlp.ast.types.Type;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -56,7 +60,7 @@ public class CodeGenerator {
     }
 
     public void pushBp() {
-        write("push bp");
+        write("pusha bp");
         enter();
     }
 
@@ -80,6 +84,11 @@ public class CodeGenerator {
         enter();
     }
 
+    public void pop(char suffix) {
+        write("pop"+suffix);
+        enter();
+    }
+
     public void out(char suffix) {
         write( "out"+suffix );
         enter();
@@ -100,9 +109,26 @@ public class CodeGenerator {
         enter();
     }
 
-    public void cast(char from, char to) {
-        write(from + "2" + to);
-        enter();
+    public void convert(Type oldType, Type newType) {
+        if (oldType == newType) return;
+        if (oldType instanceof CharType) {
+            write("b2i");
+            enter();
+            if (newType instanceof DoubleType) {
+                write("i2f");
+                enter();
+            }
+        } else if (oldType instanceof DoubleType) {
+            write( "f2i" );
+            enter();
+            if (newType instanceof CharType) {
+                write( "i2b");
+                enter();
+            }
+        } else {
+            write("i2"+newType.getSuffix());
+            enter();
+        }
     }
 
     public void add(char suffix) {

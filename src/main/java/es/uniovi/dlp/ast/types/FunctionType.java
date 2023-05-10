@@ -11,6 +11,7 @@ public class FunctionType extends AbstractType {
 
     public List<VarDefinition> arguments;
     public Type returnType;
+    public int bytesParamsSum;
 
     public FunctionType(List<VarDefinition> arguments, Type returnType) {
         this.arguments = arguments;

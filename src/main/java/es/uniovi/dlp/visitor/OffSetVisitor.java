@@ -21,6 +21,7 @@ public class OffSetVisitor extends AbstractVisitor<Void, Void> {
         for (var def : fDef.statements)
             def.accept( this, param );
 
+        fDef.bytesLocalsSum = sumOffsetLocalVariables;
         return null;
     }
 
@@ -46,6 +47,7 @@ public class OffSetVisitor extends AbstractVisitor<Void, Void> {
             arg.offset = 4 + paramBytesSum;
             paramBytesSum += arg.type.numberOfBytes();
         }
+        t.bytesParamsSum = paramBytesSum;
         t.returnType.accept( this, param );
 
         return null;

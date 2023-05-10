@@ -65,6 +65,16 @@ execute[[IfElseStatement: statement -> expression statement1* statement2*]]() =
     statement2*.foreach(stmt -> execute[[stmt]]())
     <label> end <:>
 
+execute[[Function: statement -> expression1 expression2*]]() =
+    value[[(Expression)statement]]()
+    if (!(Expression) statement.type instanceof VoidType))
+        <pop> ((Expression) statement).type.suffix()
+
+execute[[Return: statement -> expression]](funcdefinition) =
+    <ret> funcdefinition.type.returnType.numberOfBytes() <,>
+          funcdefinition.bytesLocalsSum() <,>
+          funcdefinition.type.bytesParamsSum()
+
 address[[Variable: expression -> ID]]() =
     if (expression.definition.scope==0)
         <pusha> expression.definition.offset
@@ -175,3 +185,7 @@ value[[ArrayAccess: expression1 -> expression2 expression3]]() =
 value[[Access: expression1 -> expression2 expression3]]() =
     address[[expression1]]()
     <load> expression.type.suffix()
+
+value[[Function: expression1 -> expression2 expression3*]]() =
+    expression3*.foreach(exp -> value[[exp]]())
+    <call> expression2.name

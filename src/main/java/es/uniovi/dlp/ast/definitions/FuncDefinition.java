@@ -10,6 +10,7 @@ public class FuncDefinition extends AbstractDefinition {
 
   public List<VarDefinition> defs;
   public List<Statement> statements;
+  public int bytesLocalsSum;
 
   public FuncDefinition(String name, FunctionType type, List<VarDefinition> defs, List<Statement> statements, int line, int column) {
     super( type, name, line, column );
