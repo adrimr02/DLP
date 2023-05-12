@@ -71,6 +71,7 @@ execute[[Function: statement -> expression1 expression2*]]() =
         <pop> ((Expression) statement).type.suffix()
 
 execute[[Return: statement -> expression]](funcdefinition) =
+    value[[expression]]()
     <ret> funcdefinition.type.returnType.numberOfBytes() <,>
           funcdefinition.bytesLocalsSum() <,>
           funcdefinition.type.bytesParamsSum()

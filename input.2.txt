@@ -45,7 +45,7 @@ def show(row:int): {
 # Main program
 def main(): {
 	i:int;
-
+    inc:int;
 	p(); # Invocation (procedure) as statement
 	i=0;
 	pair.character='0';
@@ -56,8 +56,9 @@ def main(): {
 
 	i=0;
 	j=0;
+	inc=1;
 	while i<10: {
-		fill(i, j, 1); 
+		fill(i, j, inc);
 		show(i);
 		i=i+1;
 		j=i*10;

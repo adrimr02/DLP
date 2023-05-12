@@ -10,6 +10,8 @@ import es.uniovi.dlp.visitor.ExecuteCGVisitor;
 import es.uniovi.dlp.visitor.IdentificationVisitor;
 import es.uniovi.dlp.visitor.OffSetVisitor;
 import es.uniovi.dlp.visitor.TypeCheckingVisitor;
+import introspector.model.IntrospectorModel;
+import introspector.view.IntrospectorView;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -21,6 +23,8 @@ public class Main {
 			System.err.println("Please, pass me the input and output files.");
 			return;
 		}
+
+		System.out.println("Compiling " + args[0] + " into " + args[1] + "...");
 
 		// create a lexer that feeds off of input CharStream
 		CharStream input = CharStreams.fromFileName(args[0]);
@@ -45,8 +49,9 @@ public class Main {
 			CodeGenerator cg = new CodeGenerator(args[0], args[1]);
 			ast.accept(new ExecuteCGVisitor(cg), null);
 			cg.close();
-			//IntrospectorModel model=new IntrospectorModel("Program", ast);
-			//new IntrospectorView("Introspector", model);
+			// IntrospectorModel model=new IntrospectorModel("Program", ast);
+			// new IntrospectorView("Introspector", model);
+			System.out.println("Success!");
 		}
 	}
 }

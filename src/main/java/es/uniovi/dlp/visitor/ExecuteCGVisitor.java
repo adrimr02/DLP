@@ -65,7 +65,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
         }
 
         if (((FunctionType) fdef.type).returnType instanceof VoidType)
-            cg.ret(0, lvSize, 0);
+            cg.ret(0, lvSize, ((FunctionType) fdef.type).bytesParamsSum);
 
         return null;
     }
@@ -159,6 +159,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
     @Override
     public Void visit(Return stmt, FuncDefinition param) {
         cg.debugLine(stmt.getLine());
+        stmt.returnValue.accept(vv, null);
         cg.ret( stmt.returnValue.getType().numberOfBytes(), param.bytesLocalsSum, ((FunctionType)param.type).bytesParamsSum);
         return null;
     }
