@@ -42,14 +42,27 @@ execute[[Assignment: statement -> expression1 expression2]]() =
     <store> expression2.type.suffix()
 
 
-execute[[WhileStatement: statement -> expression statement*]]() =
+execute[[WhileStatement: statement1 -> expression statement2*]]() =
     int labels = cg.getLabels(2)
     int condition = labels + 1
     int end = labels + 2
     <label> condition <:>
     value[[expression]]()
     <jz label> end
-    statement*.foreach(stmt -> execute[[stmt]]())
+    statement2*.foreach(stmt -> execute[[stmt]]())
+    <jump label> condition
+    <label> end <:>
+
+execute[[ForStatement: statement1 -> statement2 expression statement3 statement4*]]() =
+    int labels = cg.getLabels(2)
+    int condition = labels + 1
+    int end = labels + 2
+    execute[[statement2]]()
+    <label> condition <:>
+    value[[expression]]()
+    <jz label> end
+    statement4*.foreach(stmt -> execute[[stmt]]())
+    execute[[statement3]]()
     <jump label> condition
     <label> end <:>
 

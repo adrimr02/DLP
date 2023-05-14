@@ -1,4 +1,4 @@
-// Generated from C:/Users/adria/OneDrive/Documentos/Uniovi/3er Curso/DLP/Practicas/project/dlp/src/main/java/es/uniovi/dlp/parser\Pmm.g4 by ANTLR 4.12.0
+// Generated from C:/Users/adria/IdeaProjects/DLP/src/main/java/es/uniovi/dlp/parser\Pmm.g4 by ANTLR 4.12.0
 package es.uniovi.dlp.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -40,6 +40,12 @@ public interface PmmVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitType(PmmParser.TypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#expStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpStmt(PmmParser.ExpStmtContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PmmParser#statement}.
 	 * @param ctx the parse tree

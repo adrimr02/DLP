@@ -1,4 +1,4 @@
-// Generated from C:/Users/adria/OneDrive/Documentos/Uniovi/3er Curso/DLP/Practicas/project/dlp/src/main/java/es/uniovi/dlp/parser\Pmm.g4 by ANTLR 4.12.0
+// Generated from C:/Users/adria/IdeaProjects/DLP/src/main/java/es/uniovi/dlp/parser\Pmm.g4 by ANTLR 4.12.0
 package es.uniovi.dlp.parser;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -47,6 +47,13 @@ public class PmmBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Pm
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitType(PmmParser.TypeContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpStmt(PmmParser.ExpStmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

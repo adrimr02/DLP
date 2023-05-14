@@ -147,6 +147,27 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
     }
 
     @Override
+    public Void visit(For forStmt, FuncDefinition param) {
+        cg.debugLine(forStmt.getLine());
+        int labels = cg.getLabels(2);
+        int conditionL = labels + 1;
+        int endL = labels + 2;
+        forStmt.initialization.accept( this, param );
+        cg.label( "label"+conditionL );
+        forStmt.condition.accept( vv, null );
+        cg.jz("label"+endL);
+        for (var stmt : forStmt.body)
+            stmt.accept( this, param );
+
+        forStmt.increment.accept( this, param );
+
+        cg.jump( "label"+conditionL );
+
+        cg.label( "label"+endL );
+        return null;
+    }
+
+    @Override
     public Void visit(Function stmt, FuncDefinition param) {
         cg.debugLine(stmt.getLine());
         stmt.accept( vv, null );

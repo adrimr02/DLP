@@ -20,6 +20,7 @@ public interface Visitor<PT, RT> {
     RT visit(Function stmt, PT param);
     RT visit(IfElse stmt, PT param);
     RT visit(While stmt, PT param);
+    RT visit(For stmt, PT param);
     RT visit(Input stmt, PT param);
     RT visit(Print stmt, PT param);
     RT visit(Return stmt, PT param);

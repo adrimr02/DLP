@@ -80,6 +80,17 @@ public abstract class AbstractVisitor<PT,RT> implements Visitor<PT,RT> {
     }
 
     @Override
+    public RT visit(For forStmt, PT param) {
+        forStmt.initialization.accept( this, param );
+        forStmt.condition.accept( this, param );
+        forStmt.increment.accept( this, param );
+        for (var stmt : forStmt.body)
+            stmt.accept( this, param );
+
+        return null;
+    }
+
+    @Override
     public RT visit(Input stmt, PT param) {
         stmt.expression.accept( this, param );
         return null;

@@ -63,6 +63,12 @@ public abstract class AbstractCGVisitor<PT, RT> implements Visitor<PT, RT> {
     }
 
     @Override
+    public RT visit(For whileStmt, PT param) {
+        throw new IllegalStateException("\"Undefined template visitFor for " +
+                "the code function \"" + this.getClass().getName() + "\"");
+    }
+
+    @Override
     public RT visit(Input stmt, PT param) {
         throw new IllegalStateException("\"Undefined template visitInput for " +
                 "the code function \"" + this.getClass().getName() + "\"");

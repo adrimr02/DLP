@@ -10,8 +10,6 @@ import es.uniovi.dlp.visitor.ExecuteCGVisitor;
 import es.uniovi.dlp.visitor.IdentificationVisitor;
 import es.uniovi.dlp.visitor.OffSetVisitor;
 import es.uniovi.dlp.visitor.TypeCheckingVisitor;
-import introspector.model.IntrospectorModel;
-import introspector.view.IntrospectorView;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;

@@ -9,7 +9,7 @@ import es.uniovi.dlp.ast.types.*;
 }
 
 program returns [Program ast] locals [List<Definition> defs = new ArrayList<>();, List<VarDefinition> mainDefs = new ArrayList<>();, List<Statement> mainStmts = new ArrayList<>(); ]:
-       (definition { $defs.addAll( $definition.list ); })* MAIN='def' 'main' '('')'':''{' (var_definition { $mainDefs.addAll( $var_definition.list ); })* (statement { $mainStmts.addAll( $statement.list ); })* '}' EOF { $defs.add( new FuncDefinition( "main", new FunctionType( new ArrayList<>(), VoidType.get() ), $mainDefs, $mainStmts, $MAIN.getLine(), $MAIN.getCharPositionInLine()+1 ) ); $ast = new Program( $defs ); }
+       (definition { $defs.addAll( $definition.list ); })* MAIN='def' 'main' '('')''{' (var_definition { $mainDefs.addAll( $var_definition.list ); })* (statement { $mainStmts.addAll( $statement.list ); })* '}' EOF { $defs.add( new FuncDefinition( "main", new FunctionType( new ArrayList<>(), VoidType.get() ), $mainDefs, $mainStmts, $MAIN.getLine(), $MAIN.getCharPositionInLine()+1 ) ); $ast = new Program( $defs ); }
        ;
 
 definition returns [List<Definition> list = new ArrayList<>();]:
@@ -21,7 +21,7 @@ var_definition returns [List<VarDefinition> list = new ArrayList<>();] locals [L
                 { for (Token id : $ids) { $list.add(new VarDefinition( id.getText(), $type.t, id.getLine(), id.getCharPositionInLine()+1 )); } }
         ;
 func_definition returns [Definition ast] locals [List<VarDefinition> args = new ArrayList<>();, List<VarDefinition> defs = new ArrayList<>();, List<Statement> stmts = new ArrayList<>();, Type retType = VoidType.get(); ]:
-        'def' ID=IDENT '('(ID1=IDENT':'T1=type { $args.add( new VarDefinition( $ID1.text, $T1.t, $ID1.getLine(), $ID1.getCharPositionInLine()+1 ) ); }(','ID2=IDENT':'T2=type { $args.add( new VarDefinition( $ID2.text, $T2.t, $ID2.getLine(), $ID2.getCharPositionInLine()+1 ) ); })*)?')'':'(rt=type { $retType = $rt.t; })?'{' (vdefs=var_definition { $defs.addAll( $vdefs.list ); })* (stmt=statement { $stmts.addAll( $stmt.list ); })* '}' { $ast = new FuncDefinition( $ID.text, new FunctionType( $args, $retType ), $defs, $stmts, $ID.getLine(), $ID.getCharPositionInLine()+1 ); }
+        'def' ID=IDENT '('(ID1=IDENT':'T1=type { $args.add( new VarDefinition( $ID1.text, $T1.t, $ID1.getLine(), $ID1.getCharPositionInLine()+1 ) ); }(','ID2=IDENT':'T2=type { $args.add( new VarDefinition( $ID2.text, $T2.t, $ID2.getLine(), $ID2.getCharPositionInLine()+1 ) ); })*)?')'(':'rt=type { $retType = $rt.t; })?'{' (vdefs=var_definition { $defs.addAll( $vdefs.list ); })* (stmt=statement { $stmts.addAll( $stmt.list ); })* '}' { $ast = new FuncDefinition( $ID.text, new FunctionType( $args, $retType ), $defs, $stmts, $ID.getLine(), $ID.getCharPositionInLine()+1 ); }
         ;
 
 type returns [Type t] locals [List<RecordField> defs = new ArrayList<>();]:
@@ -32,14 +32,19 @@ type returns [Type t] locals [List<RecordField> defs = new ArrayList<>();]:
     | 'struct' '{' (var_definition { for (Definition def : $var_definition.list) { if ($defs.stream().anyMatch( d -> d.name.equals(def.getName()) )) new ErrorType("duplicated field", def.getLine(), def.getColumn()); $defs.add( new RecordField(def.getName(), def.getType(), def.getLine(), def.getColumn() ) ); } })* '}' { $t = new RecordType( $defs ); }
     ;
 
+expStmt returns [Statement ast]:
+           left=expression '=' right=expression { $ast = new Assignment( $left.ast, $right.ast, $left.ast.getLine(), $left.ast.getColumn() ); }
+         ;
+
 statement returns [List<Statement> list = new ArrayList();] locals [List<Statement> stmts = new ArrayList<>();, List<Statement> elseStmts = new ArrayList<>();]:
            'print' exps=expressions ';' { $list.addAll( $exps.list.stream().map( e -> new Print( e, e.getLine(), e.getColumn()) ).toList() ); }
          | 'input' exps=expressions ';' { $list.addAll( $exps.list.stream().map( e -> new Input( e, e.getLine(), e.getColumn()) ).toList() ); }
-         | left=expression '=' right=expression ';' { $list.add( new Assignment( $left.ast, $right.ast, $left.ast.getLine(), $left.ast.getColumn() ) ); }
-         | 'if' expression':' (( '{' (stm=statement { $stmts.addAll( $stm.list ); })* '}') | (stm2=statement { $stmts.addAll( $stm2.list ); })) ('else'':' (('{' (stm3=statement { $elseStmts.addAll( $stm3.list ); })* '}') | (stm4=statement { $elseStmts.addAll( $stm4.list ); })))? { $list.add( new IfElse( $expression.ast, $stmts, $elseStmts, $expression.ast.getLine(), $expression.ast.getColumn() ) ); }
-         | 'while' expression ':' (('{' (stm=statement { $stmts.addAll( $stm.list ); })* '}') | stm=statement { $stmts.addAll( $stm.list ); }) { $list.add( new While( $expression.ast, $stmts, $expression.ast.getLine(), $expression.ast.getColumn() ) ); }
+         | 'if' '('expression')' (( '{' (stm=statement { $stmts.addAll( $stm.list ); })* '}') | (stm2=statement { $stmts.addAll( $stm2.list ); })) ('else'':' (('{' (stm3=statement { $elseStmts.addAll( $stm3.list ); })* '}') | (stm4=statement { $elseStmts.addAll( $stm4.list ); })))? { $list.add( new IfElse( $expression.ast, $stmts, $elseStmts, $expression.ast.getLine(), $expression.ast.getColumn() ) ); }
+         | 'while' '('expression ')' (('{' (stm=statement { $stmts.addAll( $stm.list ); })* '}') | stm=statement { $stmts.addAll( $stm.list ); }) { $list.add( new While( $expression.ast, $stmts, $expression.ast.getLine(), $expression.ast.getColumn() ) ); }
+         | 'for' '(' initialization=expStmt ';' condition=expression ';' increment=expStmt ')' (('{' (stm=statement { $stmts.addAll( $stm.list ); })* '}') | stm=statement { $stmts.addAll( $stm.list ); }) { $list.add( new For( $initialization.ast, $condition.ast, $increment.ast, $stmts, $expression.ast.getLine(), $expression.ast.getColumn() ) ); }
          | 'return' exp=expression ';' { $list.add( new Return( $exp.ast, $exp.ast.getLine(), $exp.ast.getColumn() ) ); }
          | func_call ';' { $list.add( $func_call.ast ); }
+         | expStmt ';' { $list.add( $expStmt.ast ); }
          ;
 
 func_call returns [Function ast] locals [List<Expression> exps = new ArrayList<>();]: IDENT '(' (expressions{ $exps.addAll( $expressions.list ); })? ')' { $ast = new Function( new Variable( $IDENT.text, $IDENT.getLine(), $IDENT.getCharPositionInLine()+1 ), $exps, $IDENT.getLine(), $IDENT.getCharPositionInLine()+1 ); };

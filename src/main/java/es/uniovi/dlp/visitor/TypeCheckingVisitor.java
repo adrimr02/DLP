@@ -81,6 +81,22 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
     }
 
     @Override
+    public Boolean visit(For forStmt, Type param) {
+        forStmt.initialization.accept( this, param );
+        forStmt.condition.accept( this, param );
+        forStmt.increment.accept( this, param );
+
+        boolean hasReturn = false;
+
+        for (var stmt : forStmt.body)
+            hasReturn = hasReturn || stmt.accept( this, param );
+
+        forStmt.condition.getType().asLogical( forStmt );
+
+        return hasReturn;
+    }
+
+    @Override
     public Boolean visit(Input stmt, Type param) {
         stmt.expression.accept( this, param );
         if (!stmt.expression.getIsLValue())
@@ -238,10 +254,5 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
         t.returnType.accept( this, param );
 
         return null;
-    }
-
-
-    private String incompatibleTypesError(Type expected, Type found) {
-        return "Incompatible types. Required '" + expected + "', found '" + found + "'";
     }
 }
