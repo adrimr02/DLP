@@ -26,13 +26,21 @@ public class CharType extends AbstractType {
   }
 
   @Override
+  public Type ternary(Type type, ASTNode astNode) {
+    if (type instanceof CharType || type instanceof ErrorType)
+      return type;
+    else
+      return new ErrorType( "Ternary operator cannot be applied to 'Char' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
+  }
+
+  @Override
   public Type arithmetic(Type type, ASTNode astNode) {
     if (type instanceof CharType)
       return IntType.get();
     else if (type instanceof ErrorType)
       return type;
     else
-      return new ErrorType( "Comparison operator cannot be applied to 'Char' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
+      return new ErrorType( "Arithmetic operator cannot be applied to 'Char' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
   }
 
   @Override

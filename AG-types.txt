@@ -24,6 +24,8 @@ G = {
     (21) FuncDefinition: definition1 -> ID type varDefinition* statement*
     (22) FunctionType: type -> type varDefinition*
     (23) VarDefinition: varDefinition -> ID type
+
+    (24) Ternary: expression1 -> expression2 expression3 expression4
 }
 
 A = {
@@ -56,6 +58,9 @@ R = {
     (21) definition.type = type
     (22) definition2*.foreach(def -> def.type.asBuiltInType()
          type.asBuiltInType()
+
+    (24) expression2.type.asLogical()
+         expression1.type = expression3.type.ternary(expression4.type)
 }
 
 Types (if case not present -> error):

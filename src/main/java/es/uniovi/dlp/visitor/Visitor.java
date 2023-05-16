@@ -29,6 +29,7 @@ public interface Visitor<PT, RT> {
      * Expressions
      */
 
+    RT visit(Ternary exp, PT param);
     RT visit(Arithmetic exp, PT param);
     RT visit(Comparison exp, PT param);
     RT visit(LogicComparison exp, PT param);

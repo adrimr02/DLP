@@ -9,6 +9,7 @@ public interface Type extends ASTNode {
     Type asBuiltInType(ASTNode astNode);
     Type asLogical(ASTNode astNode);
     Type parenthesis(List<Type> type, ASTNode astNode);
+    Type ternary(Type type, ASTNode astNode);
     Type arithmetic(Type type, ASTNode astNode);
     Type arithmetic(ASTNode astNode);
     Type comparison(Type type, ASTNode astNode);

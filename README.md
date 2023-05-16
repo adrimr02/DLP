@@ -5,7 +5,8 @@ Proyecto de la asignatura de DLP del Grado en Ingeniería Informática del Softw
 Este proyecto consiste en desarrollar en Java un compilador para una versión simplificada del lenguaje C.
 ## Proximos pasos
 - Bucle for ✔
-- Unary arithmetics
+- Operador ternario ✔
+- Unary arithmetics 
 - Tipo boolean
 - Declaración de variables en cualquier punto
 - Asignación en declaración

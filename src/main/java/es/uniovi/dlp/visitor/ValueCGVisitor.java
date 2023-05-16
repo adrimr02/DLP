@@ -1,8 +1,10 @@
 package es.uniovi.dlp.visitor;
 
 import com.sun.jdi.DoubleType;
+import es.uniovi.dlp.ast.definitions.FuncDefinition;
 import es.uniovi.dlp.ast.expressions.*;
 import es.uniovi.dlp.ast.statements.Function;
+import es.uniovi.dlp.ast.statements.IfElse;
 import es.uniovi.dlp.ast.types.*;
 import es.uniovi.dlp.util.CodeGenerator;
 
@@ -13,6 +15,25 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     public ValueCGVisitor(CodeGenerator cg, AddressCGVisitor av) {
         super( cg );
         this.av = av;
+    }
+
+    @Override
+    public Void visit(Ternary exp, Void param) {
+        int labels = cg.getLabels(2);
+        int elseL = labels + 1;
+        int endL = labels + 2;
+
+        exp.condition.accept( this, param );
+        cg.jz("label"+elseL);
+
+        exp.trueExp.accept( this, param );
+        cg.jump( "label"+endL );
+
+        cg.label( "label"+elseL );
+        exp.falseExp.accept( this, param );
+
+        cg.label( "label"+endL );
+        return null;
     }
 
     @Override

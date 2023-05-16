@@ -145,6 +145,17 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
     }
 
     @Override
+    public Boolean visit(Ternary exp, Type param) {
+        exp.condition.accept( this, param );
+        exp.trueExp.accept( this, param );
+        exp.falseExp.accept( this, param );
+        exp.setIsLValue( false );
+        exp.condition.getType().asLogical( exp );
+        exp.setType( exp.trueExp.getType().ternary( exp.falseExp.getType(), exp ) );
+        return null;
+    }
+
+    @Override
     public Boolean visit(Arithmetic exp, Type param) {
         exp.left.accept( this, param );
         exp.right.accept( this, param );

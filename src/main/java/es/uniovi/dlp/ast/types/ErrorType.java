@@ -37,6 +37,11 @@ public class ErrorType extends AbstractType {
     }
 
     @Override
+    public Type ternary(Type type, ASTNode astNode) {
+        return this;
+    }
+
+    @Override
     public Type arithmetic(Type type, ASTNode astNode) {
         return this;
     }
