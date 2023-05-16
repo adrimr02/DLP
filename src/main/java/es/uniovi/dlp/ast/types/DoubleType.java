@@ -25,7 +25,7 @@ public class DoubleType extends AbstractType {
     if (type instanceof DoubleType || type instanceof ErrorType)
       return type;
     else
-      return new ErrorType( "Incompatible types. Required 'Double' type, found '" + type + "'", astNode.getLine(), astNode.getColumn() );
+      return new ErrorType( "Arithmetic operator cannot be applied to 'Double' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
   }
 
   @Override
