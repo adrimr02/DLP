@@ -113,4 +113,9 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
         return new ErrorType(this + " is not assignable to " + type, astNode.getLine(), astNode.getColumn());
     }
+
+    @Override
+    public Type asNumerical(ASTNode astNode) {
+        return new ErrorType(this + " is not a numerical type", astNode.getLine(), astNode.getColumn());
+    }
 }

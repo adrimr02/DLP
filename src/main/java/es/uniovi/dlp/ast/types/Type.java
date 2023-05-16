@@ -20,6 +20,8 @@ public interface Type extends ASTNode {
     Type dot(String id, ASTNode astNode);
     Type promotesTo(Type type, ASTNode astNode);
 
+    Type asNumerical( ASTNode astNode );
+
     int numberOfBytes();
 
     char getSuffix();

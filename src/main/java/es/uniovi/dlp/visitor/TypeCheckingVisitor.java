@@ -50,6 +50,17 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
     }
 
     @Override
+    public Boolean visit(AssignmentOperator stmt, Type param) {
+        stmt.target.accept( this, param );
+        if (!stmt.target.getIsLValue())
+            new ErrorType("Variable expected", stmt.getLine(), stmt.getColumn());
+
+        stmt.target.getType().asNumerical( stmt );
+
+        return false;
+    }
+
+    @Override
     public Boolean visit(IfElse ifElse, Type param) {
         ifElse.condition.accept( this, param );
 

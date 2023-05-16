@@ -34,6 +34,7 @@ type returns [Type t] locals [List<RecordField> defs = new ArrayList<>();]:
 
 expStmt returns [Statement ast]:
            left=expression '=' right=expression { $ast = new Assignment( $left.ast, $right.ast, $left.ast.getLine(), $left.ast.getColumn() ); }
+         | expression OP=('++' | '--') { $ast = new AssignmentOperator( $expression.ast, $OP.text, $expression.ast.getLine(), $expression.ast.getColumn() ); }
          ;
 
 statement returns [List<Statement> list = new ArrayList();] locals [List<Statement> stmts = new ArrayList<>();, List<Statement> elseStmts = new ArrayList<>();]:
@@ -71,6 +72,8 @@ expression returns [Expression ast]:
           | CHAR_CONSTANT { $ast = new CharLiteral( LexerHelper.lexemeToChar($CHAR_CONSTANT.text), $CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine()+1 ); }
           | IDENT { $ast = new Variable( $IDENT.text, $IDENT.getLine(), $IDENT.getCharPositionInLine()+1 ); }
           ;
+
+
 
 /*** LEXICO ***/
 

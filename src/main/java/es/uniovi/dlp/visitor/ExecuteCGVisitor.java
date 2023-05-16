@@ -4,7 +4,9 @@ import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.ast.definitions.FuncDefinition;
 import es.uniovi.dlp.ast.definitions.VarDefinition;
 import es.uniovi.dlp.ast.statements.*;
+import es.uniovi.dlp.ast.types.CharType;
 import es.uniovi.dlp.ast.types.FunctionType;
+import es.uniovi.dlp.ast.types.IntType;
 import es.uniovi.dlp.ast.types.VoidType;
 import es.uniovi.dlp.util.CodeGenerator;
 
@@ -84,6 +86,26 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
         stmt.right.accept( this.vv, null );
 
         cg.store(stmt.left.getType().getSuffix());
+
+        return null;
+    }
+
+    public Void visit(AssignmentOperator stmt, FuncDefinition param) {
+        cg.debugLine(stmt.getLine());
+        stmt.target.accept( this.av, null );
+        stmt.target.accept( this.vv, null );
+
+        cg.pushi(1);
+
+        if (!(stmt.target.getType() instanceof IntType))
+            cg.convert( IntType.get(), stmt.target.getType() );
+
+        switch (stmt.operator) {
+            case "++" -> cg.add(stmt.target.getType().getSuffix());
+            case "--" -> cg.sub(stmt.target.getType().getSuffix());
+        }
+
+        cg.store(stmt.target.getType().getSuffix());
 
         return null;
     }

@@ -84,6 +84,11 @@ public class IntType extends AbstractType {
   }
 
   @Override
+  public Type asNumerical(ASTNode astNode) {
+    return this;
+  }
+
+  @Override
   public int numberOfBytes() {
     return 2;
   }

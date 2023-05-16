@@ -6,8 +6,10 @@ Este proyecto consiste en desarrollar en Java un compilador para una versión si
 ## Proximos pasos
 - Bucle for ✔
 - Operador ternario ✔
-- Unary arithmetics 
+- Operadores incremento y decremento (++, --) ✔
+- Operadores de asignacion (+=, -=, *=, /=, %=)
 - Tipo boolean
+- Return vacio en funciones void
 - Declaración de variables en cualquier punto
 - Asignación en declaración
 - Conversión implicita de tipos

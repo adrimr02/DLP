@@ -29,7 +29,7 @@ SENTENCIAS
 Una escritura es la palabra reservada "print" seguida de una lista de una o mas expresiones separadas por comas.
 Una lectura es la palabra reservada "input" seguida de una lista de una o mas expresiones separadas por comas.
 Una asignacion esta compuesta por dos expresiones separadas por el operador '='.
-La sentencia condicional "if"-"else" y la sentencia iterativa "while" siguen la sintaxis del lenguaje Python (sin parentesis y con ':' despues de la condicion y despues de else).
+La sentencia condicional "if"-"else" y las sentencias iterativas "while" y "for" siguen la sintaxis del lenguaje Java.
 En ambos casos el cuerpo sigue la sintaxis de Java, las sentencias van entre '{' '}' y si solamente hay un sentencia pueden omitirse. 
 Se permite la sentencia 'return' <expresion> (la expresion es obligatoria).
 La invocacion a una funcion sin retorno (se denomina procedimiento) sera siempre una sentencia.
@@ -41,6 +41,7 @@ La conversion explicita a tipos simples (cast) se realizara utilizando la sintax
 Las expresiones estan formadas por:
 - Constantes enteras, reales y caracter sin signo.
 - Identificadores
+- Operadores ternarios: <condición> ? <expresion cierta> : <expresion falsa>
 - Los siguientes operadores aplicados a una o dos expresiones (por 
 orden de precedencia descendente):
 		()		Non associative

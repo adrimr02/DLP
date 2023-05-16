@@ -1,10 +1,6 @@
 def main() {
     i: int;
-    input i;
-    if (i >= 0) {
-        print '+';
-    } else {
-        print '-';
+    for (i = 0; i < 10; i--) {
+        print i;
     }
-    print i >= 0 ? '+' : '-';
 }
