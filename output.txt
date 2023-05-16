@@ -10,37 +10,40 @@ main:
 ' * Integer i (offset: -2)
 enter 2
 #line 3
-#line 3
 pusha bp
 pushi -2
 addi
-pushi 0
+ini
 storei
-label1:
-pusha bp
-pushi -2
-addi
-loadi
-pushi 10
-lti
-jz label2
 #line 4
 pusha bp
 pushi -2
 addi
 loadi
-outi
-#line 3
-pusha bp
-pushi -2
-addi
+pushi 0
+gei
+jz label1
+#line 5
+pushb 43
+outb
+jmp label2
+label1:
+#line 7
+pushb 45
+outb
+label2:
+#line 9
 pusha bp
 pushi -2
 addi
 loadi
-pushi 1
-addi
-storei
-jmp label1
-label2:
+pushi 0
+gei
+jz label3
+pushb 43
+jmp label4
+label3:
+pushb 45
+label4:
+outb
 ret 0,2,0

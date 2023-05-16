@@ -34,6 +34,14 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     }
 
     @Override
+    public Type ternary(Type type, ASTNode astNode) {
+        if (type instanceof ErrorType)
+            return type;
+
+        return new ErrorType(this + " cannot be the result of ternary operators", astNode.getLine(), astNode.getColumn());
+    }
+
+    @Override
     public Type arithmetic(Type type, ASTNode astNode) {
         if (type instanceof ErrorType)
             return type;

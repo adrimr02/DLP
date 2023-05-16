@@ -113,6 +113,14 @@ public abstract class AbstractVisitor<PT,RT> implements Visitor<PT,RT> {
      */
 
     @Override
+    public RT visit(Ternary exp, PT param) {
+        exp.condition.accept( this, param );
+        exp.trueExp.accept( this, param );
+        exp.falseExp.accept( this, param );
+        return null;
+    }
+
+    @Override
     public RT visit(Arithmetic exp, PT param) {
         exp.left.accept( this, param );
         exp.right.accept( this, param );

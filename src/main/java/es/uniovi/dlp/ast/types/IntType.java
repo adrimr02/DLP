@@ -26,11 +26,19 @@ public class IntType extends AbstractType {
   }
 
   @Override
+  public Type ternary(Type type, ASTNode astNode) {
+    if (type instanceof IntType || type instanceof ErrorType)
+      return type;
+    else
+      return new ErrorType( "Ternary operator cannot be applied to 'Integer' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
+  }
+
+  @Override
   public Type arithmetic(Type type, ASTNode astNode) {
     if (type instanceof IntType || type instanceof ErrorType)
       return type;
     else
-      return new ErrorType( "Incompatible types. Required 'Integer' type, found '" + type + "'", astNode.getLine(), astNode.getColumn() );
+      return new ErrorType( "Arithmetic operator cannot be applied to 'Integer' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
   }
 
   @Override

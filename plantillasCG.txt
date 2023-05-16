@@ -203,3 +203,15 @@ value[[Access: expression1 -> expression2 expression3]]() =
 value[[Function: expression1 -> expression2 expression3*]]() =
     expression3*.foreach(exp -> value[[exp]]())
     <call> expression2.name
+
+execute[[Ternary: expression1 -> expression2 expression3 expression4]]() =
+    int labels = cg.getLabels(2)
+    int else = labels + 1
+    int end = labels + 2
+    value[[expression2]]()
+    <jz label> else
+    value[[expression3]]()
+    <jump label> end
+    <label> else <:>
+    value[[expression4]]()
+    <label> end <:>
