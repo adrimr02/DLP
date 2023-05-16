@@ -50,12 +50,24 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
     }
 
     @Override
-    public Boolean visit(AssignmentOperator stmt, Type param) {
+    public Boolean visit(UnaryOperator stmt, Type param) {
         stmt.target.accept( this, param );
         if (!stmt.target.getIsLValue())
             new ErrorType("Variable expected", stmt.getLine(), stmt.getColumn());
 
         stmt.target.getType().asNumerical( stmt );
+
+        return false;
+    }
+
+    @Override
+    public Boolean visit(AssignmentOperator stmt, Type param) {
+        stmt.left.accept( this, param );
+        stmt.right.accept( this, param );
+        if (!stmt.left.getIsLValue())
+            new ErrorType("Variable expected", stmt.getLine(), stmt.getColumn());
+
+        stmt.left.getType().asNumerical( stmt.right.getType(), stmt );
 
         return false;
     }

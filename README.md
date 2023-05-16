@@ -7,7 +7,7 @@ Este proyecto consiste en desarrollar en Java un compilador para una versión si
 - Bucle for ✔
 - Operador ternario ✔
 - Operadores incremento y decremento (++, --) ✔
-- Operadores de asignacion (+=, -=, *=, /=, %=)
+- Operadores de asignacion (+=, -=, *=, /=, %=) ✔
 - Tipo boolean
 - Return vacio en funciones void
 - Declaración de variables en cualquier punto
@@ -16,4 +16,3 @@ Este proyecto consiste en desarrollar en Java un compilador para una versión si
 - Sobrecarga de funciones
 - Definición de tipos
 - Tipos complejos como parametros y retorno (paso por referencia)
-- Tipo string

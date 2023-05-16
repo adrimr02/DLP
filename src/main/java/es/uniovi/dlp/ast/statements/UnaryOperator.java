@@ -4,17 +4,15 @@ import es.uniovi.dlp.ast.AbstractASTNode;
 import es.uniovi.dlp.ast.expressions.Expression;
 import es.uniovi.dlp.visitor.Visitor;
 
-public class AssignmentOperator extends AbstractASTNode implements Statement {
+public class UnaryOperator extends AbstractASTNode implements Statement {
 
-    public Expression left;
-    public Expression right;
+    public Expression target;
     public String operator;
 
-    public AssignmentOperator(Expression left, String operator, Expression right, int line, int column) {
+    public UnaryOperator(Expression target, String operator, int line, int column) {
         super(line, column);
-        this.left = left;
+        this.target = target;
         this.operator = operator;
-        this.right = right;
     }
 
     @Override

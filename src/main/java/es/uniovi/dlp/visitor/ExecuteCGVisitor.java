@@ -4,7 +4,6 @@ import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.ast.definitions.FuncDefinition;
 import es.uniovi.dlp.ast.definitions.VarDefinition;
 import es.uniovi.dlp.ast.statements.*;
-import es.uniovi.dlp.ast.types.CharType;
 import es.uniovi.dlp.ast.types.FunctionType;
 import es.uniovi.dlp.ast.types.IntType;
 import es.uniovi.dlp.ast.types.VoidType;
@@ -90,7 +89,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
         return null;
     }
 
-    public Void visit(AssignmentOperator stmt, FuncDefinition param) {
+    public Void visit(UnaryOperator stmt, FuncDefinition param) {
         cg.debugLine(stmt.getLine());
         stmt.target.accept( this.av, null );
         stmt.target.accept( this.vv, null );
@@ -106,6 +105,25 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
         }
 
         cg.store(stmt.target.getType().getSuffix());
+
+        return null;
+    }
+
+    public Void visit(AssignmentOperator stmt, FuncDefinition param) {
+        cg.debugLine(stmt.getLine());
+        stmt.left.accept( this.av, null );
+        stmt.left.accept( this.vv, null );
+        stmt.right.accept( this.vv, null );
+
+        switch (stmt.operator) {
+            case "+=" -> cg.add(stmt.left.getType().getSuffix());
+            case "-=" -> cg.sub(stmt.left.getType().getSuffix());
+            case "*=" -> cg.mul(stmt.left.getType().getSuffix());
+            case "/=" -> cg.div(stmt.left.getType().getSuffix());
+            case "%=" -> cg.mod(stmt.left.getType().getSuffix());
+        }
+
+        cg.store(stmt.left.getType().getSuffix());
 
         return null;
     }

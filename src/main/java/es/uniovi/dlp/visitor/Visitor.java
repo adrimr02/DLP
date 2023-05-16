@@ -17,6 +17,7 @@ public interface Visitor<PT, RT> {
      * Statements
      */
     RT visit(Assignment stmt, PT param);
+    RT visit(UnaryOperator stmt, PT param);
     RT visit(AssignmentOperator stmt, PT param);
     RT visit(Function stmt, PT param);
     RT visit(IfElse stmt, PT param);

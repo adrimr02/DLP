@@ -34,7 +34,8 @@ type returns [Type t] locals [List<RecordField> defs = new ArrayList<>();]:
 
 expStmt returns [Statement ast]:
            left=expression '=' right=expression { $ast = new Assignment( $left.ast, $right.ast, $left.ast.getLine(), $left.ast.getColumn() ); }
-         | expression OP=('++' | '--') { $ast = new AssignmentOperator( $expression.ast, $OP.text, $expression.ast.getLine(), $expression.ast.getColumn() ); }
+         | expression OP=('++' | '--') { $ast = new UnaryOperator( $expression.ast, $OP.text, $expression.ast.getLine(), $expression.ast.getColumn() ); }
+         | left=expression OP=('+=' | '-=' | '*=' | '/=' | '%=') right=expression { $ast = new AssignmentOperator( $left.ast, $OP.text, $right.ast, $expression.ast.getLine(), $expression.ast.getColumn() ); }
          ;
 
 statement returns [List<Statement> list = new ArrayList();] locals [List<Statement> stmts = new ArrayList<>();, List<Statement> elseStmts = new ArrayList<>();]:

@@ -49,8 +49,15 @@ public abstract class AbstractVisitor<PT,RT> implements Visitor<PT,RT> {
     }
 
     @Override
-    public RT visit(AssignmentOperator stmt, PT param) {
+    public RT visit(UnaryOperator stmt, PT param) {
         stmt.target.accept( this, param );
+        return null;
+    }
+
+    @Override
+    public RT visit(AssignmentOperator stmt, PT param) {
+        stmt.left.accept( this, param );
+        stmt.right.accept( this, param );
         return null;
     }
 

@@ -89,6 +89,14 @@ public class IntType extends AbstractType {
   }
 
   @Override
+  public Type asNumerical(Type type, ASTNode astNode) {
+    if (type instanceof IntType || type instanceof ErrorType)
+      return type;
+    else
+      return new ErrorType( "Arithmetic operator cannot be applied to 'Integer' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
+  }
+
+  @Override
   public int numberOfBytes() {
     return 2;
   }
