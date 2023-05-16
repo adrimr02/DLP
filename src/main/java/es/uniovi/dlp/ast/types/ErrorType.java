@@ -92,6 +92,11 @@ public class ErrorType extends AbstractType {
     }
 
     @Override
+    public Type asNumerical(Type type, ASTNode astNode) {
+        return this;
+    }
+
+    @Override
     public String toString() {
         return "Error: " + message + " at line " + getLine() + ":" + getColumn();
     }

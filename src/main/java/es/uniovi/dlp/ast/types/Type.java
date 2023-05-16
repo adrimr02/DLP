@@ -21,6 +21,7 @@ public interface Type extends ASTNode {
     Type promotesTo(Type type, ASTNode astNode);
 
     Type asNumerical( ASTNode astNode );
+    Type asNumerical( Type type, ASTNode astNode );
 
     int numberOfBytes();
 

@@ -41,9 +41,9 @@ execute[[Assignment: statement -> expression1 expression2]]() =
     value[[expression2]]
     <store> expression2.type.suffix()
 
-execute[[Assignment: statement -> expression ('++'|'--')]]() =
-    address[[expression]]
-    value[[expression]]
+execute[[UnaryOperator: statement -> expression ('++'|'--')]]() =
+    address[[expression]]()
+    value[[expression]]()
     <push> 1
      switch (statement.operator) {
             case "++":
@@ -52,7 +52,29 @@ execute[[Assignment: statement -> expression ('++'|'--')]]() =
             case "--":
                 <sub> expression.type.suffix()
                 break;
-    <store> expression2.type.suffix()
+    <store> expression.type.suffix()
+
+execute[[AssignmentOperator: statement -> expression1 ('++'|'--') expression2]]() =
+    address[[expression1]]()
+    value[[expression1]]()
+    value[[expression2]]()
+    switch (statement.operator) {
+       case "+=":
+           <add> expression.type.suffix()
+           break;
+       case "-=":
+           <sub> expression.type.suffix()
+           break;
+       case "*=":
+           <mul> expression.type.suffix()
+           break;
+       case "/=":
+           <div> expression.type.suffix()
+           break;
+       case "%=":
+           <mod> expression.type.suffix()
+           break;
+    <store> expression1.type.suffix()
 
 execute[[WhileStatement: statement1 -> expression statement2*]]() =
     int labels = cg.getLabels(2)

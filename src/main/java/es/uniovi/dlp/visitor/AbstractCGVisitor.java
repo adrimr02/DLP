@@ -45,6 +45,12 @@ public abstract class AbstractCGVisitor<PT, RT> implements Visitor<PT, RT> {
     }
 
     @Override
+    public RT visit(UnaryOperator stmt, PT param) {
+        throw new IllegalStateException("\"Undefined template visitUnaryOperator for " +
+                "the code function \"" + this.getClass().getName() + "\"");
+    }
+
+    @Override
     public RT visit(AssignmentOperator stmt, PT param) {
         throw new IllegalStateException("\"Undefined template visitAssignmentOperator for " +
                 "the code function \"" + this.getClass().getName() + "\"");

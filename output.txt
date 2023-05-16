@@ -14,7 +14,7 @@ enter 2
 pusha bp
 pushi -2
 addi
-pushi 0
+pushi 1
 storei
 label1:
 pusha bp
@@ -38,8 +38,8 @@ pusha bp
 pushi -2
 addi
 loadi
-pushi 1
-subi
+pushi 2
+muli
 storei
 jmp label1
 label2:

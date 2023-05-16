@@ -73,6 +73,14 @@ public class DoubleType extends AbstractType {
   }
 
   @Override
+  public Type asNumerical(Type type, ASTNode astNode) {
+    if (type instanceof DoubleType || type instanceof ErrorType)
+      return type;
+    else
+      return new ErrorType( "Arithmetic operator cannot be applied to 'Double' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
+  }
+
+  @Override
   public int numberOfBytes() {
     return 4;
   }
