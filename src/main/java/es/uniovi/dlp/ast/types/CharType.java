@@ -37,7 +37,9 @@ public class CharType extends AbstractType {
 
   @Override
   public Type comparison(Type type, ASTNode astNode) {
-    if (type instanceof CharType || type instanceof ErrorType)
+    if (type instanceof DoubleType)
+      return IntType.get();
+    else if (type instanceof ErrorType)
       return type;
     else
       return new ErrorType( "Comparison operator cannot be applied to 'Char' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
