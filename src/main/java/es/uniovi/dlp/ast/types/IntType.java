@@ -16,11 +16,6 @@ public class IntType extends AbstractType {
   }
 
   @Override
-  public Type asLogical(ASTNode astNode) {
-    return this;
-  }
-
-  @Override
   public Type asBuiltInType(ASTNode astNode) {
     return this;
   }
@@ -49,27 +44,14 @@ public class IntType extends AbstractType {
   @Override
   public Type comparison(Type type, ASTNode astNode) {
     if (type instanceof IntType || type instanceof ErrorType)
-      return type;
+      return BoolType.get();
     else
       return new ErrorType( "Comparison operator cannot be applied to 'Integer' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
   }
 
   @Override
-  public Type logic(Type type, ASTNode astNode) {
-    if (type instanceof IntType || type instanceof ErrorType)
-      return type;
-    else
-      return new ErrorType( "Logical operator cannot be applied to 'Integer' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
-  }
-
-  @Override
-  public Type logic(ASTNode astNode) {
-    return this;
-  }
-
-  @Override
   public Type canBeCastTo(Type type, ASTNode astNode) {
-    if (type instanceof IntType || type instanceof DoubleType || type instanceof CharType)
+    if (type instanceof IntType || type instanceof DoubleType || type instanceof CharType || type instanceof BoolType)
       return type;
     else
       return new ErrorType( "Cannot cast 'Integer' to '" + type + "'", astNode.getLine(), astNode.getColumn() );

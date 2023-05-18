@@ -43,6 +43,7 @@ public interface Visitor<PT, RT> {
     RT visit(IntLiteral exp, PT param);
     RT visit(RealLiteral exp, PT param);
     RT visit(CharLiteral exp, PT param);
+    RT visit(BoolLiteral exp, PT param);
     RT visit(Variable exp, PT param);
 
     /*
@@ -52,6 +53,7 @@ public interface Visitor<PT, RT> {
     RT visit(IntType t, PT param);
     RT visit(DoubleType t, PT param);
     RT visit(CharType t, PT param);
+    RT visit(BoolType t, PT param);
     RT visit(VoidType t, PT param);
     RT visit(ArrayType t, PT param);
     RT visit(RecordType t, PT param);

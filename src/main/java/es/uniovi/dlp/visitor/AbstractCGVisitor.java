@@ -175,6 +175,12 @@ public abstract class AbstractCGVisitor<PT, RT> implements Visitor<PT, RT> {
     }
 
     @Override
+    public RT visit(BoolLiteral exp, PT param) {
+        throw new IllegalStateException("\"Undefined template visitBoolLiteral for " +
+                "the code function \"" + this.getClass().getName() + "\"");
+    }
+
+    @Override
     public RT visit(Variable exp, PT param) {
         throw new IllegalStateException("\"Undefined template visitVariable for " +
                 "the code function \"" + this.getClass().getName() + "\"");
@@ -199,6 +205,12 @@ public abstract class AbstractCGVisitor<PT, RT> implements Visitor<PT, RT> {
     @Override
     public RT visit(CharType t, PT param) {
         throw new IllegalStateException("\"Undefined template visitCharType for " +
+                "the code function \"" + this.getClass().getName() + "\"");
+    }
+
+    @Override
+    public RT visit(BoolType t, PT param) {
+        throw new IllegalStateException("\"Undefined template visitBoolType for " +
                 "the code function \"" + this.getClass().getName() + "\"");
     }
 

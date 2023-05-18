@@ -50,5 +50,15 @@ public class LexerHelper {
 		}
 		return ' ';
 	}
-	
+
+	public static boolean lexemeToBool(String str) {
+		try {
+			return Boolean.parseBoolean(str);
+		}
+		catch(NumberFormatException e) {
+			System.out.println(e);
+		}
+		return false;
+	}
+
 }

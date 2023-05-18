@@ -19,7 +19,7 @@ La funcion "main" no devuelve nada, no recibe parametros y obligatoriamente debe
 
 TIPOS
 =====
-Los tipos simples son "int", "double" y "char".
+Los tipos simples son "int", "double", "char" y "boolean".
 Los arrays se pueden crear con el constructor de tipos "[]", especificando el tamaño con una constante entera (como en C) seguido de cualquier tipo.
 Se usa el constructor de tipos "struct" para la creacion de registros. 
 Los registros no tienen identificador, y los campos son declarados como variables dentro de '{' '}'. No se permite la definicion de tipos (p.e. typedef).

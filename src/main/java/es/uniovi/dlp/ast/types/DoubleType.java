@@ -44,7 +44,7 @@ public class DoubleType extends AbstractType {
   @Override
   public Type comparison(Type type, ASTNode astNode) {
     if (type instanceof DoubleType)
-      return IntType.get();
+      return BoolType.get();
     else if (type instanceof ErrorType)
       return type;
     else
@@ -53,7 +53,7 @@ public class DoubleType extends AbstractType {
 
   @Override
   public Type canBeCastTo(Type type, ASTNode astNode) {
-    if (type instanceof IntType || type instanceof DoubleType || type instanceof CharType)
+    if (type instanceof IntType || type instanceof DoubleType || type instanceof CharType || type instanceof BoolType)
       return type;
     else
       return new ErrorType( "Cannot cast 'Double' to '" + type + "'", astNode.getLine(), astNode.getColumn() );

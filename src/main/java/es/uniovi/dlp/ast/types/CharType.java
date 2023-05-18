@@ -45,7 +45,9 @@ public class CharType extends AbstractType {
 
   @Override
   public Type comparison(Type type, ASTNode astNode) {
-    if (type instanceof CharType || type instanceof ErrorType)
+    if (type instanceof DoubleType)
+      return BoolType.get();
+    else if (type instanceof ErrorType)
       return type;
     else
       return new ErrorType( "Comparison operator cannot be applied to 'Char' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
@@ -53,7 +55,7 @@ public class CharType extends AbstractType {
 
   @Override
   public Type canBeCastTo(Type type, ASTNode astNode) {
-    if (type instanceof IntType || type instanceof DoubleType || type instanceof CharType)
+    if (type instanceof IntType || type instanceof DoubleType || type instanceof CharType || type instanceof BoolType)
       return type;
     else
       return new ErrorType( "Cannot cast 'Char' to '" + type + "'", astNode.getLine(), astNode.getColumn() );

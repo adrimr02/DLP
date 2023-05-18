@@ -202,6 +202,11 @@ public abstract class AbstractVisitor<PT,RT> implements Visitor<PT,RT> {
     }
 
     @Override
+    public RT visit(BoolLiteral exp, PT param) {
+        return null;
+    }
+
+    @Override
     public RT visit(Variable exp, PT param) {
         return null;
     }
@@ -222,6 +227,11 @@ public abstract class AbstractVisitor<PT,RT> implements Visitor<PT,RT> {
 
     @Override
     public RT visit(CharType t, PT param) {
+        return null;
+    }
+
+    @Override
+    public RT visit(BoolType t, PT param) {
         return null;
     }
 

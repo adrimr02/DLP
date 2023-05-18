@@ -28,6 +28,7 @@ type returns [Type t] locals [List<RecordField> defs = new ArrayList<>();]:
       'int' { $t = IntType.get(); }
     | 'double' { $t = DoubleType.get(); }
     | 'char' { $t = CharType.get(); }
+    | 'boolean' { $t = BoolType.get(); }
     | '['INT_CONSTANT']'type { $t = new ArrayType($type.t, LexerHelper.lexemeToInt($INT_CONSTANT.text)); }
     | 'struct' '{' (var_definition { for (Definition def : $var_definition.list) { if ($defs.stream().anyMatch( d -> d.name.equals(def.getName()) )) new ErrorType("duplicated field", def.getLine(), def.getColumn()); $defs.add( new RecordField(def.getName(), def.getType(), def.getLine(), def.getColumn() ) ); } })* '}' { $t = new RecordType( $defs ); }
     ;
@@ -71,6 +72,7 @@ expression returns [Expression ast]:
           | INT_CONSTANT { $ast = new IntLiteral( LexerHelper.lexemeToInt($INT_CONSTANT.text), $INT_CONSTANT.getLine(), $INT_CONSTANT.getCharPositionInLine()+1 ); }
           | REAL_CONSTANT { $ast = new RealLiteral( LexerHelper.lexemeToReal($REAL_CONSTANT.text), $REAL_CONSTANT.getLine(), $REAL_CONSTANT.getCharPositionInLine()+1 ); }
           | CHAR_CONSTANT { $ast = new CharLiteral( LexerHelper.lexemeToChar($CHAR_CONSTANT.text), $CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine()+1 ); }
+          | BOOL_CONSTANT { $ast = new BoolLiteral( LexerHelper.lexemeToBool($CHAR_CONSTANT.text), $CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine()+1 ); }
           | IDENT { $ast = new Variable( $IDENT.text, $IDENT.getLine(), $IDENT.getCharPositionInLine()+1 ); }
           ;
 
@@ -94,5 +96,7 @@ INT_CONSTANT: [1-9]NUMERO* | '0';
 REAL_CONSTANT: INT_CONSTANT?(('.'INT_CONSTANT? EXPONENTE?) | EXPONENTE);
 
 CHAR_CONSTANT: '\''( . | '\\'NUMERO NUMERO? NUMERO? | '\\n' | '\\t')'\'';
+
+BOOL_CONSTANT: 'true' | 'false';
 
 IDENT: (LETRA | '_')(LETRA|NUMERO|'_')*;

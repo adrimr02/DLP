@@ -269,6 +269,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
     }
 
     @Override
+    public Boolean visit(BoolLiteral exp, Type param) {
+        exp.setIsLValue( false );
+        exp.setType( BoolType.get() );
+        return null;
+    }
+
+    @Override
     public Boolean visit(Variable exp, Type param) {
         exp.setIsLValue( true );
         exp.setType( exp.definition.getType() );

@@ -8,7 +8,7 @@ Este proyecto consiste en desarrollar en Java un compilador para una versión si
 - Operador ternario ✔
 - Operadores incremento y decremento (++, --) ✔
 - Operadores de asignacion (+=, -=, *=, /=, %=) ✔
-- Tipo boolean
+- Tipo boolean ✔
 - Return vacio en funciones void
 - Declaración de variables en cualquier punto
 - Asignación en declaración

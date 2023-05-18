@@ -68,12 +68,19 @@ R = {
 
 Types (if case not present -> error):
 A           C           L           Cast
-i i -> i    i i -> i    i i -> i    i i -> i
-d d -> d    d d -> i                i d -> d
-c c -> c    c c -> i                i c -> c
+i i -> i    i i -> b    b b -> b    i i -> i
+d d -> d    d d -> b                i d -> d
+c c -> c    c c -> b                i c -> c
+                                    i b -> b
                                     d i -> i
                                     d d -> d
                                     d c -> c
+                                    d b -> b
                                     c i -> i
                                     c d -> d
                                     c c -> c
+                                    c b -> b
+                                    b b -> b
+                                    b i -> i
+                                    b d -> d
+                                    b c -> c

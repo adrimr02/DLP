@@ -1,6 +1,9 @@
 def main() {
     i: int;
-    for (i = 1; i < 10; i*=2) {
-        print i;
-    }
+    b: boolean;
+    input b;
+    if (b)
+        for (i = 1; i < 10; i*=2) {
+            print i;
+        }
 }

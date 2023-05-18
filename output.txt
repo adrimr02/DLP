@@ -8,29 +8,43 @@ main:
 ' * Local Variables
 #line 2
 ' * Integer i (offset: -2)
-enter 2
 #line 3
-#line 3
+' * Boolean b (offset: -4)
+enter 4
+#line 4
+pusha bp
+pushi -4
+addi
+ini
+storei
+#line 5
+pusha bp
+pushi -4
+addi
+loadi
+jz label1
+#line 6
+#line 6
 pusha bp
 pushi -2
 addi
 pushi 1
 storei
-label1:
+label3:
 pusha bp
 pushi -2
 addi
 loadi
 pushi 10
 lti
-jz label2
-#line 4
+jz label4
+#line 7
 pusha bp
 pushi -2
 addi
 loadi
 outi
-#line 3
+#line 6
 pusha bp
 pushi -2
 addi
@@ -41,6 +55,9 @@ loadi
 pushi 2
 muli
 storei
-jmp label1
+jmp label3
+label4:
+jmp label2
+label1:
 label2:
-ret 0,2,0
+ret 0,4,0
