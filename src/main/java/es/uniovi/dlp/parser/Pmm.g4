@@ -45,7 +45,7 @@ statement returns [List<Statement> list = new ArrayList();] locals [List<Stateme
          | 'if' '('expression')' (( '{' (stm=statement { $stmts.addAll( $stm.list ); })* '}') | (stm2=statement { $stmts.addAll( $stm2.list ); })) ('else' (('{' (stm3=statement { $elseStmts.addAll( $stm3.list ); })* '}') | (stm4=statement { $elseStmts.addAll( $stm4.list ); })))? { $list.add( new IfElse( $expression.ast, $stmts, $elseStmts, $expression.ast.getLine(), $expression.ast.getColumn() ) ); }
          | 'while' '('expression ')' (('{' (stm=statement { $stmts.addAll( $stm.list ); })* '}') | stm=statement { $stmts.addAll( $stm.list ); }) { $list.add( new While( $expression.ast, $stmts, $expression.ast.getLine(), $expression.ast.getColumn() ) ); }
          | 'for' '(' initialization=expStmt ';' condition=expression ';' increment=expStmt ')' (('{' (stm=statement { $stmts.addAll( $stm.list ); })* '}') | stm=statement { $stmts.addAll( $stm.list ); }) { $list.add( new For( $initialization.ast, $condition.ast, $increment.ast, $stmts, $expression.ast.getLine(), $expression.ast.getColumn() ) ); }
-         | 'return' exp=expression ';' { $list.add( new Return( $exp.ast, $exp.ast.getLine(), $exp.ast.getColumn() ) ); }
+         | RET='return' expression? ';' { $list.add( new Return( $expression.ctx != null ? $expression.ast : null, $RET.getLine(), $RET.getCharPositionInLine()+1 ) ); }
          | func_call ';' { $list.add( $func_call.ast ); }
          | expStmt ';' { $list.add( $expStmt.ast ); }
          ;
@@ -81,13 +81,13 @@ expression returns [Expression ast]:
 /*** LEXICO ***/
 
 fragment
-LETRA: [a-zA-Z];
+    LETRA: [a-zA-Z];
 fragment
-NUMERO: [0-9];
+    NUMERO: [0-9];
 fragment
-EXPONENTE: ('E'|'e')('-'|'+')?INT_CONSTANT;
+    EXPONENTE: ('E'|'e')('-'|'+')?INT_CONSTANT;
 fragment
-COMENTARIO: ('#' .*? ('\n' | EOF)) | ('"""'.*?'"""');
+    COMENTARIO: ('#' .*? ('\n' | EOF)) | ('"""'.*?'"""');
 
 TRASH: ([\n\t\r ] | COMENTARIO) -> skip;
 

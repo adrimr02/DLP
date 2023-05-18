@@ -24,7 +24,12 @@ addi
 loadi
 jz label1
 #line 6
-#line 6
+ret 0,4,0
+jmp label2
+label1:
+label2:
+#line 7
+#line 7
 pusha bp
 pushi -2
 addi
@@ -38,13 +43,13 @@ loadi
 pushi 10
 lti
 jz label4
-#line 7
+#line 8
 pusha bp
 pushi -2
 addi
 loadi
 outi
-#line 6
+#line 7
 pusha bp
 pushi -2
 addi
@@ -57,7 +62,4 @@ muli
 storei
 jmp label3
 label4:
-jmp label2
-label1:
-label2:
 ret 0,4,0

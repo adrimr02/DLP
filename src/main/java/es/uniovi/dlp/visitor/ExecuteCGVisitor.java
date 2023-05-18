@@ -220,8 +220,13 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
     @Override
     public Void visit(Return stmt, FuncDefinition param) {
         cg.debugLine(stmt.getLine());
-        stmt.returnValue.accept(vv, null);
-        cg.ret( stmt.returnValue.getType().numberOfBytes(), param.bytesLocalsSum, ((FunctionType)param.type).bytesParamsSum);
+        if (stmt.returnValue != null) {
+            stmt.returnValue.accept(vv, null);
+            cg.ret(stmt.returnValue.getType().numberOfBytes(), param.bytesLocalsSum, ((FunctionType) param.type).bytesParamsSum);
+        } else {
+            cg.ret(0, param.bytesLocalsSum, ((FunctionType) param.type).bytesParamsSum);
+        }
+
         return null;
     }
 }

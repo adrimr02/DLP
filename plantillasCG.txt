@@ -118,10 +118,16 @@ execute[[Function: statement -> expression1 expression2*]]() =
         <pop> ((Expression) statement).type.suffix()
 
 execute[[Return: statement -> expression]](funcdefinition) =
-    value[[expression]]()
-    <ret> funcdefinition.type.returnType.numberOfBytes() <,>
-          funcdefinition.bytesLocalsSum() <,>
-          funcdefinition.type.bytesParamsSum()
+    if (expression != null) {
+        value[[expression]]()
+        <ret> funcdefinition.type.returnType.numberOfBytes() <,>
+              funcdefinition.bytesLocalsSum() <,>
+              funcdefinition.type.bytesParamsSum()
+    } else {
+        <ret> 0 <,>
+              funcdefinition.bytesLocalsSum() <,>
+              funcdefinition.type.bytesParamsSum()
+    }
 
 address[[Variable: expression -> ID]]() =
     if (expression.definition.scope==0)

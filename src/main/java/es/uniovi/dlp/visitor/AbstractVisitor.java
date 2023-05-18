@@ -117,7 +117,8 @@ public abstract class AbstractVisitor<PT,RT> implements Visitor<PT,RT> {
 
     @Override
     public RT visit(Return stmt, PT param) {
-        stmt.returnValue.accept( this, param );
+        if (stmt.returnValue != null)
+            stmt.returnValue.accept( this, param );
         return null;
     }
 

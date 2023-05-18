@@ -140,10 +140,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
 
     @Override
     public Boolean visit(Return stmt, Type param) {
-        stmt.returnValue.accept( this, param );
-
-        stmt.returnValue.getType().promotesTo( param, stmt );
-
+        if (stmt.returnValue != null) {
+            stmt.returnValue.accept(this, param);
+            stmt.returnValue.getType().promotesTo(param, stmt);
+        } else {
+            if (!(param instanceof VoidType))
+                new ErrorType("Missing return value", stmt.getLine(), stmt.getColumn());
+        }
         return true;
     }
 

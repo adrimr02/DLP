@@ -9,7 +9,7 @@ Este proyecto consiste en desarrollar en Java un compilador para una versión si
 - Operadores incremento y decremento (++, --) ✔
 - Operadores de asignacion (+=, -=, *=, /=, %=) ✔
 - Tipo boolean ✔
-- Return vacio en funciones void
+- Return vacio en funciones void ✔
 - Declaración de variables en cualquier punto
 - Asignación en declaración
 - Conversión implicita de tipos
