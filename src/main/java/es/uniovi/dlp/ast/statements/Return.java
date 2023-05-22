@@ -8,6 +8,8 @@ public class Return extends AbstractASTNode implements Statement {
 
   public Expression returnValue;
 
+  public int currentReservedBytes;
+
   public Return(Expression value, int line, int column) {
     super(line, column);
     this.returnValue = value;

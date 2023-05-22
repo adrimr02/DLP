@@ -1,6 +1,7 @@
 package es.uniovi.dlp.visitor;
 
 import es.uniovi.dlp.ast.definitions.FuncDefinition;
+import es.uniovi.dlp.ast.definitions.VarDefinition;
 import es.uniovi.dlp.ast.expressions.*;
 import es.uniovi.dlp.ast.statements.*;
 import es.uniovi.dlp.ast.types.*;
@@ -20,9 +21,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
 
         boolean hasReturn = false;
 
-        for (var def : fDef.defs)
-            def.accept( this, param );
-
         for (var stmt : fDef.statements)
             hasReturn = hasReturn || stmt.accept( this, ((FunctionType) fDef.type).returnType );
 
@@ -31,6 +29,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
 
         return null;
     }
+
+    @Override
+    public Boolean visit(VarDefinition def, Type param) {
+        super.visit(def, param);
+        return false;
+    }
+
     /*
      * Statements
      */

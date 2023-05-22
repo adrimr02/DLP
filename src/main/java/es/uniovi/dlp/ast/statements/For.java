@@ -13,6 +13,8 @@ public class For extends AbstractASTNode implements Statement {
     public Statement increment;
     public List<Statement> body;
 
+    public int bytesLocalsSum;
+
     public For(Statement initialization, Expression condition, Statement increment, List<Statement> body, int line, int column) {
         super(line, column);
         this.initialization = initialization;

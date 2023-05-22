@@ -1,10 +1,18 @@
 def main() {
     i: int;
-    b: boolean;
-    input b;
-    if (b)
-        return;
-    for (i = 1; i < 10; i*=2) {
-        print i;
+    a: boolean;
+    a = false;
+    for (i = 1; i < 2; i++) {
+        if (a) {
+            i: int;
+            i = 10;
+            print 'i';
+            print i;
+        } else {
+            i: int;
+            i = 11;
+            print 'e';
+            print i;
+        }
     }
 }

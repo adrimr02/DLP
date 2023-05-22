@@ -26,9 +26,6 @@ public abstract class AbstractVisitor<PT,RT> implements Visitor<PT,RT> {
     public RT visit(FuncDefinition fDef, PT param) {
         fDef.type.accept( this, param );
 
-        for (var def : fDef.defs)
-            def.accept( this, param );
-
         for (var def : fDef.statements)
             def.accept( this, param );
 

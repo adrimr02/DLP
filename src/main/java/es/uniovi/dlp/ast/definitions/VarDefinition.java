@@ -4,7 +4,7 @@ import es.uniovi.dlp.ast.statements.Statement;
 import es.uniovi.dlp.ast.types.Type;
 import es.uniovi.dlp.visitor.Visitor;
 
-public class VarDefinition extends AbstractDefinition {
+public class VarDefinition extends AbstractDefinition implements Statement {
 
   public int offset;
 

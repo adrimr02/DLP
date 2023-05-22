@@ -12,6 +12,9 @@ public class IfElse extends AbstractASTNode implements Statement {
   public List<Statement> ifBody;
   public List<Statement> elseBody;
 
+  public int ifBytesLocalsSum;
+  public int elseBytesLocalsSum;
+
   public IfElse(Expression condition, List<Statement> ifBody, List<Statement> elseBody, int line, int column) {
     super( line, column );
     this.condition = condition;

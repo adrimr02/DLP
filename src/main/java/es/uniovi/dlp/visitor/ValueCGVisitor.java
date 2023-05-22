@@ -136,6 +136,13 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
+    public Void visit(BoolLiteral exp, Void param) {
+        cg.pushi(exp.value ? 1 : 0);
+
+        return null;
+    }
+
+    @Override
     public Void visit(Variable exp, Void param) {
 
         exp.accept(this.av, param);

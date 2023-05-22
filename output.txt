@@ -3,63 +3,95 @@ call main
 halt
 ' * Global variables
 ' * Functions
+#line 1
 main:
 ' * Parameters
 ' * Local Variables
 #line 2
 ' * Integer i (offset: -2)
+enter 2
 #line 3
-' * Boolean b (offset: -4)
-enter 4
+' * Boolean a (offset: -4)
+enter 2
 #line 4
 pusha bp
 pushi -4
 addi
-ini
+pushi 0
 storei
 #line 5
-pusha bp
-pushi -4
-addi
-loadi
-jz label1
-#line 6
-ret 0,4,0
-jmp label2
-label1:
-label2:
-#line 7
-#line 7
+#line 5
 pusha bp
 pushi -2
 addi
 pushi 1
 storei
-label3:
-pusha bp
-pushi -2
-addi
-loadi
-pushi 10
-lti
-jz label4
-#line 8
-pusha bp
-pushi -2
-addi
-loadi
-outi
-#line 7
-pusha bp
-pushi -2
-addi
+label1:
 pusha bp
 pushi -2
 addi
 loadi
 pushi 2
-muli
+lti
+jz label2
+#line 6
+pusha bp
+pushi -4
+addi
+loadi
+jz label3
+#line 7
+' * Integer i (offset: -6)
+enter 2
+#line 8
+pusha bp
+pushi -6
+addi
+pushi 10
 storei
-jmp label3
+#line 9
+pushb 105
+outb
+#line 10
+pusha bp
+pushi -6
+addi
+loadi
+outi
+enter -2
+jmp label4
+label3:
+#line 12
+' * Integer i (offset: -6)
+enter 2
+#line 13
+pusha bp
+pushi -6
+addi
+pushi 11
+storei
+#line 14
+pushb 101
+outb
+#line 15
+pusha bp
+pushi -6
+addi
+loadi
+outi
+enter -2
 label4:
+#line 5
+pusha bp
+pushi -2
+addi
+pusha bp
+pushi -2
+addi
+loadi
+pushi 1
+addi
+storei
+jmp label1
+label2:
 ret 0,4,0

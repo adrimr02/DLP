@@ -39,34 +39,25 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
     }
 
     public Void visit(VarDefinition vdef, FuncDefinition param) {
+        cg.debugLine(vdef.getLine());
         cg.comment( "* " + vdef);
+        cg.enter(vdef.type.numberOfBytes());
         return null;
     }
 
     public Void visit(FuncDefinition fdef, FuncDefinition param) {
+        cg.debugLine(fdef.getLine());
         cg.label( fdef.name );
         cg.comment( "* Parameters");
         fdef.type.accept( this, param );
         cg.comment( "* Local Variables" );
-
-        int lvSize = 0;
-
-        for (var def : fdef.defs) {
-            cg.debugLine(def.getLine());
-            def.accept( this, fdef );
-        }
-
-        if (fdef.defs.size() > 0) {
-            cg.enter( -fdef.defs.get( fdef.defs.size() -1 ).offset );
-            lvSize = -fdef.defs.get( fdef.defs.size() -1 ).offset;
-        }
 
         for (var stmt :  fdef.statements) {
             stmt.accept(this, fdef);
         }
 
         if (((FunctionType) fdef.type).returnType instanceof VoidType)
-            cg.ret(0, lvSize, ((FunctionType) fdef.type).bytesParamsSum);
+            cg.ret(0, fdef.bytesLocalsSum, ((FunctionType) fdef.type).bytesParamsSum);
 
         return null;
     }
@@ -157,12 +148,14 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
         cg.jz("label"+elseL);
         for (var stmt : ifElse.ifBody)
             stmt.accept( this, param );
-
+        if (ifElse.ifBytesLocalsSum != 0)
+            cg.enter(-ifElse.ifBytesLocalsSum);
         cg.jump( "label"+endL );
         cg.label( "label"+elseL );
         for (var stmt : ifElse.elseBody)
             stmt.accept( this, param );
-
+        if (ifElse.elseBytesLocalsSum != 0)
+            cg.enter(-ifElse.elseBytesLocalsSum);
         cg.label( "label"+endL );
         return null;
     }
@@ -180,6 +173,8 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
         for (var stmt : whileStmt.body)
             stmt.accept( this, param );
 
+        if (whileStmt.bytesLocalsSum != 0)
+            cg.enter(-whileStmt.bytesLocalsSum);
         cg.jump( "label"+conditionL );
 
         cg.label( "label"+endL );
@@ -199,6 +194,8 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
         for (var stmt : forStmt.body)
             stmt.accept( this, param );
 
+        if (forStmt.bytesLocalsSum != 0)
+            cg.enter(-forStmt.bytesLocalsSum);
         forStmt.increment.accept( this, param );
 
         cg.jump( "label"+conditionL );
@@ -224,7 +221,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
             stmt.returnValue.accept(vv, null);
             cg.ret(stmt.returnValue.getType().numberOfBytes(), param.bytesLocalsSum, ((FunctionType) param.type).bytesParamsSum);
         } else {
-            cg.ret(0, param.bytesLocalsSum, ((FunctionType) param.type).bytesParamsSum);
+            cg.ret(0, stmt.currentReservedBytes, ((FunctionType) param.type).bytesParamsSum);
         }
 
         return null;

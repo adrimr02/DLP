@@ -11,6 +11,8 @@ public class While extends AbstractASTNode implements Statement {
   public Expression condition;
   public List<Statement> body;
 
+  public int bytesLocalsSum;
+
   public While(Expression condition, List<Statement> body, int line, int column) {
     super( line, column );
     this.condition = condition;
