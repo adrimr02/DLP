@@ -10,7 +10,7 @@ public class ArrayAccess extends AbstractASTNode implements Expression {
   public Expression index;
 
   public boolean isLValue;
-  public Type type;
+  private Type type;
 
   public ArrayAccess(Expression variable, Expression index, int line, int column) {
     super( line, column );
@@ -30,7 +30,7 @@ public class ArrayAccess extends AbstractASTNode implements Expression {
 
   @Override
   public Type getType() {
-    return type;
+    return type.get();
   }
 
   @Override

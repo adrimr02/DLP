@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface Type extends ASTNode {
 
+    Type get();
+
     Type asBuiltInType(ASTNode astNode);
     Type asLogical(ASTNode astNode);
     Type parenthesis(List<Type> type, ASTNode astNode);

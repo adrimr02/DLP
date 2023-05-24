@@ -8,7 +8,7 @@ public class RealLiteral extends AbstractASTNode implements Expression {
   
   public double value;
   public boolean isLValue;
-  public Type type;
+  private Type type;
 
   public RealLiteral(double value, int line, int column) {
     super(line, column );
@@ -27,7 +27,7 @@ public class RealLiteral extends AbstractASTNode implements Expression {
 
   @Override
   public Type getType() {
-    return type;
+    return type.get();
   }
 
   @Override

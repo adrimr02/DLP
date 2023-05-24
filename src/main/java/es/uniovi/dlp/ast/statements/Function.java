@@ -13,7 +13,7 @@ public class Function extends AbstractASTNode implements Statement, Expression {
   public List<Expression> params;
   public Variable var;
   public boolean isLValue;
-  public Type type;
+  private Type type;
 
   public Function(Variable var, List<Expression> params, int line, int column) {
     super( line, column );
@@ -33,7 +33,7 @@ public class Function extends AbstractASTNode implements Statement, Expression {
 
   @Override
   public Type getType() {
-    return type;
+    return type.get();
   }
 
   @Override

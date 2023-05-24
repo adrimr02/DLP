@@ -2,6 +2,7 @@ package es.uniovi.dlp.visitor;
 
 import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.ast.definitions.FuncDefinition;
+import es.uniovi.dlp.ast.definitions.TypeDefinition;
 import es.uniovi.dlp.ast.definitions.VarDefinition;
 import es.uniovi.dlp.ast.expressions.*;
 import es.uniovi.dlp.ast.statements.*;
@@ -12,6 +13,8 @@ public interface Visitor<PT, RT> {
     RT visit(Program program, PT param);
     RT visit(FuncDefinition def, PT param);
     RT visit(VarDefinition def, PT param);
+
+    RT visit(TypeDefinition def, PT param);
 
     /*
      * Statements
@@ -59,6 +62,7 @@ public interface Visitor<PT, RT> {
     RT visit(RecordType t, PT param);
     RT visit(RecordField t, PT param);
     RT visit(FunctionType t, PT param);
+    RT visit(CustomType t, PT param);
     RT visit(ErrorType t, PT param);
 
 

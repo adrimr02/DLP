@@ -11,7 +11,7 @@ public class Arithmetic extends AbstractASTNode implements Expression {
   public Expression right;
 
   public boolean isLValue;
-  public Type type;
+  private Type type;
 
   public Arithmetic(Expression left, String operator, Expression right, int line, int column) {
     super( line, column );
@@ -32,7 +32,7 @@ public class Arithmetic extends AbstractASTNode implements Expression {
 
   @Override
   public Type getType() {
-    return type;
+    return type.get();
   }
 
   @Override

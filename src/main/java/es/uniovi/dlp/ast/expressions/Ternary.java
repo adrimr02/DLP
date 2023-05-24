@@ -11,7 +11,7 @@ public class Ternary extends AbstractASTNode implements Expression {
     public Expression falseExp;
 
     public boolean isLValue;
-    public Type type;
+    private Type type;
 
     public Ternary(Expression condition, Expression trueExp, Expression falseExp, int line, int column) {
         super(line, column);
@@ -32,7 +32,7 @@ public class Ternary extends AbstractASTNode implements Expression {
 
     @Override
     public Type getType() {
-        return type;
+        return type.get();
     }
 
     @Override

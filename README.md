@@ -11,9 +11,9 @@ Este proyecto consiste en desarrollar en Java un compilador para una versión si
 - Tipo boolean ✔
 - Return vacio en funciones void ✔
 - Declaración de variables en cualquier punto ✔
-- Sentencias elif
-- Asignación en declaración
-- Sobrecarga de funciones
-- Definición de tipos
+- Sobrecarga de funciones x
+- Definición de tipos ✔
 - Tipos complejos como parametros y retorno (paso por referencia)
+- Asignación en declaración
 - Conversión implicita de tipos
+- Sentencias elif

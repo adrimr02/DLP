@@ -1,11 +1,11 @@
 package es.uniovi.dlp.ast.types;
 
 import es.uniovi.dlp.ast.ASTNode;
-import es.uniovi.dlp.ast.AbstractASTNode;
 import es.uniovi.dlp.ast.definitions.VarDefinition;
 import es.uniovi.dlp.visitor.Visitor;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FunctionType extends AbstractType {
 
@@ -52,4 +52,16 @@ public class FunctionType extends AbstractType {
         return "Function(" + args + "): " + returnType;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FunctionType that = (FunctionType) o;
+        return Objects.equals(arguments, that.arguments) && Objects.equals(returnType, that.returnType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(arguments, returnType);
+    }
 }

@@ -10,7 +10,7 @@ public class Variable extends AbstractASTNode implements Expression {
   public String name;
   public boolean isLValue;
   public Definition definition;
-  public Type type;
+  private Type type;
 
   public Variable(String name, int line, int column) {
     super(line, column);
@@ -37,7 +37,7 @@ public class Variable extends AbstractASTNode implements Expression {
 
   @Override
   public Type getType() {
-    return type;
+    return type.get();
   }
 
   @Override

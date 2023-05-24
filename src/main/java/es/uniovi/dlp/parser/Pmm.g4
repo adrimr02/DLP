@@ -9,28 +9,34 @@ import es.uniovi.dlp.ast.types.*;
 }
 
 program returns [Program ast] locals [List<Definition> defs = new ArrayList<>();, List<VarDefinition> mainDefs = new ArrayList<>();, List<Statement> mainStmts = new ArrayList<>(); ]:
-       (definition { $defs.addAll( $definition.list ); })* MAIN='def' 'main' '('')''{' (statement { $mainStmts.addAll( $statement.list ); })* '}' EOF { $defs.add( new FuncDefinition( "main", new FunctionType( new ArrayList<>(), VoidType.get() ), $mainStmts, $MAIN.getLine(), $MAIN.getCharPositionInLine()+1 ) ); $ast = new Program( $defs ); }
+       (definition { $defs.addAll( $definition.list ); })* MAIN='def' 'main' '('')''{' (statement { $mainStmts.addAll( $statement.list ); })* '}' EOF { $defs.add( new FuncDefinition( "main", new FunctionType( new ArrayList<>(), VoidType.getInstance() ), $mainStmts, $MAIN.getLine(), $MAIN.getCharPositionInLine()+1 ) ); $ast = new Program( $defs ); }
        ;
 
 definition returns [List<Definition> list = new ArrayList<>();]:
             var_definition { $list.addAll( $var_definition.list ); }
+          | typedef { $list.add( $typedef.ast ); }
           | func_definition { $list.add( $func_definition.ast ); }
           ;
 var_definition returns [List<VarDefinition> list = new ArrayList<>();] locals [List<Token> ids = new ArrayList<>(); ]:
         ID1=IDENT { $ids.add($ID1); } (',' ID2=IDENT { if ($ids.stream().anyMatch( id -> id.getText().equals($ID2.text) )) new ErrorType("duplicated variable", $ID2.getLine(), $ID2.getCharPositionInLine()+1); $ids.add($ID2); })* ':' type ';'
                 { for (Token id : $ids) { $list.add(new VarDefinition( id.getText(), $type.t, id.getLine(), id.getCharPositionInLine()+1 )); } }
         ;
-func_definition returns [Definition ast] locals [List<VarDefinition> args = new ArrayList<>();, List<Statement> stmts = new ArrayList<>();, Type retType = VoidType.get(); ]:
+func_definition returns [Definition ast] locals [List<VarDefinition> args = new ArrayList<>();, List<Statement> stmts = new ArrayList<>();, Type retType = VoidType.getInstance(); ]:
         'def' ID=IDENT '('(ID1=IDENT':'T1=type { $args.add( new VarDefinition( $ID1.text, $T1.t, $ID1.getLine(), $ID1.getCharPositionInLine()+1 ) ); }(','ID2=IDENT':'T2=type { $args.add( new VarDefinition( $ID2.text, $T2.t, $ID2.getLine(), $ID2.getCharPositionInLine()+1 ) ); })*)?')'(':'rt=type { $retType = $rt.t; })?'{' (stmt=statement { $stmts.addAll( $stmt.list ); })* '}' { $ast = new FuncDefinition( $ID.text, new FunctionType( $args, $retType ), $stmts, $ID.getLine(), $ID.getCharPositionInLine()+1 ); }
         ;
 
+typedef returns [TypeDefinition ast]:
+    DEF='typedef' IDENT type ';' { $ast = new TypeDefinition( $type.t, $IDENT.text, $DEF.getLine(), $DEF.getCharPositionInLine()+1 ); }
+    ;
+
 type returns [Type t] locals [List<RecordField> defs = new ArrayList<>();]:
-      'int' { $t = IntType.get(); }
-    | 'double' { $t = DoubleType.get(); }
-    | 'char' { $t = CharType.get(); }
-    | 'boolean' { $t = BoolType.get(); }
+      'int' { $t = IntType.getInstance(); }
+    | 'double' { $t = DoubleType.getInstance(); }
+    | 'char' { $t = CharType.getInstance(); }
+    | 'boolean' { $t = BoolType.getInstance(); }
     | '['INT_CONSTANT']'type { $t = new ArrayType($type.t, LexerHelper.lexemeToInt($INT_CONSTANT.text)); }
     | 'struct' '{' (var_definition { for (Definition def : $var_definition.list) { if ($defs.stream().anyMatch( d -> d.name.equals(def.getName()) )) new ErrorType("duplicated field", def.getLine(), def.getColumn()); $defs.add( new RecordField(def.getName(), def.getType(), def.getLine(), def.getColumn() ) ); } })* '}' { $t = new RecordType( $defs ); }
+    | IDENT { $t = new CustomType( $IDENT.text, $IDENT.getLine(), $IDENT.getCharPositionInLine()+1 ); }
     ;
 
 expStmt returns [Statement ast]:

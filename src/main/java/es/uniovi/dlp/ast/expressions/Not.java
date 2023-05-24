@@ -9,7 +9,7 @@ public class Not extends AbstractASTNode implements Expression {
   public Expression target;
 
   public boolean isLValue;
-  public Type type;
+  private Type type;
 
   public Not(Expression target, int line, int column) {
     super( line, column );
@@ -28,7 +28,7 @@ public class Not extends AbstractASTNode implements Expression {
 
   @Override
   public Type getType() {
-    return type;
+    return type.get();
   }
 
   @Override

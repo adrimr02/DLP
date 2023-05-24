@@ -171,7 +171,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
 
         stmt.setIsLValue( false );
 
-        stmt.setType( stmt.var.type.parenthesis( paramTypes, stmt ) );
+        stmt.setType( stmt.var.getType().parenthesis( paramTypes, stmt ) );
         return false;
     }
 
@@ -258,41 +258,50 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
     @Override
     public Boolean visit(IntLiteral exp, Type param) {
         exp.setIsLValue( false );
-        exp.setType( IntType.get() );
+        exp.setType( IntType.getInstance() );
         return null;
     }
 
     @Override
     public Boolean visit(RealLiteral exp, Type param) {
         exp.setIsLValue( false );
-        exp.setType( DoubleType.get() );
+        exp.setType( DoubleType.getInstance() );
         return null;
     }
 
     @Override
     public Boolean visit(CharLiteral exp, Type param) {
         exp.setIsLValue( false );
-        exp.setType( CharType.get() );
+        exp.setType( CharType.getInstance() );
         return null;
     }
 
     @Override
     public Boolean visit(BoolLiteral exp, Type param) {
         exp.setIsLValue( false );
-        exp.setType( BoolType.get() );
+        exp.setType( BoolType.getInstance() );
         return null;
     }
 
     @Override
     public Boolean visit(Variable exp, Type param) {
         exp.setIsLValue( true );
-        exp.setType( exp.definition.getType() );
+        if (exp.definition.getType() instanceof CustomType)
+            exp.setType( ((CustomType) exp.definition.getType()).type );
+        else
+            exp.setType( exp.definition.getType() );
         return null;
     }
 
     /*
      * Types
      */
+
+    @Override
+    public Boolean visit(CustomType t, Type param) {
+        t.setType( t.def.type );
+        return super.visit(t, param);
+    }
 
     @Override
     public Boolean visit(FunctionType t, Type param) {

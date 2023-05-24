@@ -8,7 +8,7 @@ public class IntType extends AbstractType {
 
   private static IntType intType;
 
-  public static IntType get() {
+  public static IntType getInstance() {
     if (intType == null)
       intType = new IntType();
 
@@ -44,7 +44,7 @@ public class IntType extends AbstractType {
   @Override
   public Type comparison(Type type, ASTNode astNode) {
     if (type instanceof IntType || type instanceof ErrorType)
-      return BoolType.get();
+      return BoolType.getInstance();
     else
       return new ErrorType( "Comparison operator cannot be applied to 'Integer' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
   }

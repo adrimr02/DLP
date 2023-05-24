@@ -40,18 +40,18 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(Arithmetic exp, Void param) {
         exp.left.accept(this, param);
         if (exp.left.getType() instanceof CharType)
-            cg.convert( exp.left.getType(), IntType.get() );
+            cg.convert( exp.left.getType(), IntType.getInstance() );
 
         exp.right.accept(this, param);
         if (exp.right.getType() instanceof CharType)
-            cg.convert( exp.right.getType(), IntType.get() );
+            cg.convert( exp.right.getType(), IntType.getInstance() );
 
         switch (exp.operator) {
-            case "+" -> cg.add(exp.type.getSuffix());
-            case "-" -> cg.sub(exp.type.getSuffix());
-            case "*" -> cg.mul(exp.type.getSuffix());
-            case "/" -> cg.div(exp.type.getSuffix());
-            case "%" -> cg.mod(exp.type.getSuffix());
+            case "+" -> cg.add(exp.getType().getSuffix());
+            case "-" -> cg.sub(exp.getType().getSuffix());
+            case "*" -> cg.mul(exp.getType().getSuffix());
+            case "/" -> cg.div(exp.getType().getSuffix());
+            case "%" -> cg.mod(exp.getType().getSuffix());
         }
 
         return null;
@@ -63,12 +63,12 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
         exp.right.accept(this, param);
 
         switch (exp.operator) {
-            case "<" -> cg.lt(exp.type.getSuffix());
-            case "<=" -> cg.le(exp.type.getSuffix());
-            case "==" -> cg.eq(exp.type.getSuffix());
-            case ">=" -> cg.ge(exp.type.getSuffix());
-            case ">" -> cg.gt(exp.type.getSuffix());
-            case "!=" -> cg.ne(exp.type.getSuffix());
+            case "<" -> cg.lt(exp.getType().getSuffix());
+            case "<=" -> cg.le(exp.getType().getSuffix());
+            case "==" -> cg.eq(exp.getType().getSuffix());
+            case ">=" -> cg.ge(exp.getType().getSuffix());
+            case ">" -> cg.gt(exp.getType().getSuffix());
+            case "!=" -> cg.ne(exp.getType().getSuffix());
         }
 
         return null;
@@ -88,13 +88,13 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(UnaryMinus exp, Void param) {
-        if (exp.type instanceof DoubleType)
+        if (exp.getType() instanceof DoubleType)
             cg.pushf(0.0);
         else
             cg.pushi(0);
 
         exp.target.accept(this, param);
-        cg.sub(exp.type.getSuffix());
+        cg.sub(exp.getType().getSuffix());
 
         return null;
     }
@@ -109,7 +109,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Cast exp, Void param) {
         exp.target.accept(this, param);
-        cg.convert(exp.target.getType(), exp.type);
+        cg.convert(exp.target.getType(), exp.getType());
 
         return null;
     }
@@ -146,7 +146,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(Variable exp, Void param) {
 
         exp.accept(this.av, param);
-        cg.load(exp.type.getSuffix());
+        cg.load(exp.getType().getSuffix());
 
         return null;
     }
@@ -154,7 +154,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(ArrayAccess exp, Void param) {
         exp.accept(this.av, param);
-        cg.load(exp.type.getSuffix());
+        cg.load(exp.getType().getSuffix());
 
         return null;
     }
@@ -162,7 +162,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(FieldAccess exp, Void param) {
         exp.accept(this.av, param);
-        cg.load(exp.type.getSuffix());
+        cg.load(exp.getType().getSuffix());
 
         return null;
     }

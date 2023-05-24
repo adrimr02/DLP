@@ -1,17 +1,22 @@
 package es.uniovi.dlp.visitor;
 
 import es.uniovi.dlp.ast.definitions.FuncDefinition;
+import es.uniovi.dlp.ast.definitions.TypeDefinition;
 import es.uniovi.dlp.ast.definitions.VarDefinition;
 import es.uniovi.dlp.ast.expressions.Variable;
 import es.uniovi.dlp.ast.statements.For;
 import es.uniovi.dlp.ast.statements.IfElse;
 import es.uniovi.dlp.ast.statements.While;
+import es.uniovi.dlp.ast.types.CustomType;
 import es.uniovi.dlp.ast.types.ErrorType;
 import es.uniovi.dlp.symboltable.SymbolTable;
+import es.uniovi.dlp.symboltable.TypesSymbolTable;
 
 public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 
     private final SymbolTable symbolTable = new SymbolTable();
+
+    private final TypesSymbolTable typesTable = new TypesSymbolTable();
 
     @Override
     public Void visit(FuncDefinition fDef, Void param) {
@@ -29,6 +34,12 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
         if (!symbolTable.insert( def ))
             new ErrorType( "Repeated variable "+def.getName(), def.getLine(), def.getColumn() );
         return super.visit( def, param );
+    }
+
+    public Void visit(TypeDefinition def, Void param) {
+        if (!typesTable.insert(def))
+            new ErrorType("Repeated type", def.getLine(), def.getColumn());
+        return super.visit(def, param);
     }
 
     @Override
@@ -75,4 +86,16 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
         }
         return super.visit( exp, param );
     }
+
+    public Void visit(CustomType ctype, Void param) {
+        var def = typesTable.find(ctype.name);
+        if (def == null) {
+            var type = new ErrorType( "Unknown type " + ctype.name, ctype.getLine(), ctype.getColumn() );
+            ctype.setDefinition( new TypeDefinition( type, ctype.name, ctype.getLine(), ctype.getColumn() ) );
+        } else {
+            ctype.setDefinition( def );
+        }
+        return null;
+    }
+
 }

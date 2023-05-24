@@ -10,7 +10,7 @@ public class Cast extends AbstractASTNode implements Expression {
   public Type newType;
 
   public boolean isLValue;
-  public Type type;
+  private Type type;
 
   public Cast(Expression target, Type newType, int line, int column) {
     super( line, column );
@@ -30,7 +30,7 @@ public class Cast extends AbstractASTNode implements Expression {
 
   @Override
   public Type getType() {
-    return type;
+    return type.get();
   }
 
   @Override

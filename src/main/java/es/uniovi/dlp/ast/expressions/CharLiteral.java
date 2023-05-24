@@ -8,7 +8,7 @@ public class CharLiteral extends AbstractASTNode implements Expression {
   
   public char value;
   public boolean isLValue;
-  public Type type;
+  private Type type;
 
   public CharLiteral(char value, int line, int column) {
     super(line, column);
@@ -27,7 +27,7 @@ public class CharLiteral extends AbstractASTNode implements Expression {
 
   @Override
   public Type getType() {
-    return type;
+    return type.get();
   }
 
   @Override

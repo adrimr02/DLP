@@ -15,6 +15,10 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
         super( line, column );
     }
 
+    public Type get() {
+        return this;
+    }
+
     public Type asLogical(ASTNode astNode) {
         return new ErrorType( this + " is not a logical type", astNode.getLine(), astNode.getColumn() );
     }

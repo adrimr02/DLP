@@ -8,7 +8,7 @@ public class CharType extends AbstractType {
 
   private static CharType charType;
 
-  public static CharType get() {
+  public static CharType getInstance() {
     if (charType == null)
       charType = new CharType();
 
@@ -36,7 +36,7 @@ public class CharType extends AbstractType {
   @Override
   public Type arithmetic(Type type, ASTNode astNode) {
     if (type instanceof CharType)
-      return IntType.get();
+      return IntType.getInstance();
     else if (type instanceof ErrorType)
       return type;
     else
@@ -46,7 +46,7 @@ public class CharType extends AbstractType {
   @Override
   public Type comparison(Type type, ASTNode astNode) {
     if (type instanceof DoubleType)
-      return BoolType.get();
+      return BoolType.getInstance();
     else if (type instanceof ErrorType)
       return type;
     else

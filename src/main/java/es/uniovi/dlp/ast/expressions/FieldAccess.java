@@ -10,7 +10,7 @@ public class FieldAccess extends AbstractASTNode implements Expression {
   public String name;
 
   public boolean isLValue;
-  public Type type;
+  private Type type;
 
   public FieldAccess(Expression field, String name, int line, int column) {
     super( line, column );
@@ -30,7 +30,7 @@ public class FieldAccess extends AbstractASTNode implements Expression {
 
   @Override
   public Type getType() {
-    return type;
+    return type.get();
   }
 
   @Override

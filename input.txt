@@ -1,18 +1,28 @@
+typedef Person struct {
+    age: int;
+    sex: char;
+    money: double;
+};
+
+typedef Class struct {
+    id: int;
+    people: [20]Person;
+};
+
 def main() {
-    i: int;
-    a: boolean;
-    a = false;
-    for (i = 1; i < 2; i++) {
-        if (a) {
-            i: int;
-            i = 10;
-            print 'i';
-            print i;
-        } else {
-            i: int;
-            i = 11;
-            print 'e';
-            print i;
-        }
-    }
+    person1: Person;
+    person1.age = 21;
+
+    class: Class;
+    class.people[0].age = person1.age;
+
+    print 'm';
+    print 'a';
+    print 'i';
+    print 'n';
+
+    print person1.age;
+    print class.people[0].age;
+
+    print  1 + 2 * 3;
 }

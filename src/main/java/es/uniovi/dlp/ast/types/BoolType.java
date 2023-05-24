@@ -7,7 +7,7 @@ public class BoolType extends AbstractType {
 
   private static BoolType intType;
 
-  public static BoolType get() {
+  public static BoolType getInstance() {
     if (intType == null)
       intType = new BoolType();
 

@@ -8,7 +8,7 @@ public class DoubleType extends AbstractType {
 
   private static DoubleType doubleType;
 
-  public static DoubleType get() {
+  public static DoubleType getInstance() {
     if (doubleType == null)
       doubleType = new DoubleType();
 
@@ -44,7 +44,7 @@ public class DoubleType extends AbstractType {
   @Override
   public Type comparison(Type type, ASTNode astNode) {
     if (type instanceof DoubleType)
-      return BoolType.get();
+      return BoolType.getInstance();
     else if (type instanceof ErrorType)
       return type;
     else

@@ -7,7 +7,7 @@ public class VoidType extends AbstractType {
 
     private static VoidType voidType;
 
-    public static VoidType get() {
+    public static VoidType getInstance() {
         if (voidType == null) {
             voidType = new VoidType();
         }

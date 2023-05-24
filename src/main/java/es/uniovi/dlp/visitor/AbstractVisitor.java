@@ -2,6 +2,7 @@ package es.uniovi.dlp.visitor;
 
 import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.ast.definitions.FuncDefinition;
+import es.uniovi.dlp.ast.definitions.TypeDefinition;
 import es.uniovi.dlp.ast.definitions.VarDefinition;
 import es.uniovi.dlp.ast.expressions.*;
 import es.uniovi.dlp.ast.statements.*;
@@ -34,6 +35,12 @@ public abstract class AbstractVisitor<PT,RT> implements Visitor<PT,RT> {
 
     @Override
     public RT visit(VarDefinition def, PT param) {
+        def.type.accept( this, param );
+        return null;
+    }
+
+    @Override
+    public RT visit(TypeDefinition def, PT param) {
         def.type.accept( this, param );
         return null;
     }
@@ -254,6 +261,12 @@ public abstract class AbstractVisitor<PT,RT> implements Visitor<PT,RT> {
 
     @Override
     public RT visit(RecordField t, PT param) {
+        t.type.accept( this, param );
+        return null;
+    }
+
+    @Override
+    public RT visit(CustomType t, PT param) {
         t.type.accept( this, param );
         return null;
     }
