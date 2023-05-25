@@ -31,4 +31,6 @@ public interface Type extends ASTNode {
 
     boolean isReferenced();
 
+    String getCode();
+
 }

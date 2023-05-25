@@ -100,4 +100,8 @@ public class DoubleType extends AbstractType {
     return 'f';
   }
 
+  @Override
+  public String getCode() {
+    return "real";
+  }
 }

@@ -135,4 +135,9 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public boolean isReferenced() {
         return false;
     }
+
+    @Override
+    public String getCode() {
+        throw new IllegalStateException("This should not need a MAPL code");
+    }
 }

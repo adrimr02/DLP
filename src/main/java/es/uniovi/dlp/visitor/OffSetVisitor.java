@@ -95,7 +95,7 @@ public class OffSetVisitor extends AbstractVisitor<Void, Void> {
             var arg = t.arguments.get(i);
             arg.isReference = arg.type.isReferenced();
             arg.offset = 4 + paramBytesSum;
-            paramBytesSum += arg.type.numberOfBytes();
+            paramBytesSum += arg.isReference ? 2 : arg.type.numberOfBytes();
         }
         t.bytesParamsSum = paramBytesSum;
         t.returnType.accept( this, param );

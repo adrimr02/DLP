@@ -39,20 +39,19 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
     }
 
     public Void visit(VarDefinition vdef, FuncDefinition param) {
-        cg.debugLine(vdef.getLine());
         cg.comment( "* " + vdef);
-        if (vdef.isReference)
-            cg.enter(2);
-        else
+        if (vdef.scope == 0)
+            cg.debugGlobalVariable(vdef.name, vdef.getType());
+        else {
+            cg.debugLocalVariable(vdef.name, vdef.getType());
             cg.enter(vdef.type.numberOfBytes());
+        }
         return null;
     }
 
     public Void visit(FuncDefinition fdef, FuncDefinition param) {
-        cg.debugLine(fdef.getLine());
+        cg.debugFunction(fdef);
         cg.label( fdef.name );
-        cg.comment( "* Parameters");
-        fdef.type.accept( this, param );
         cg.comment( "* Local Variables" );
 
         for (var stmt :  fdef.statements) {
@@ -63,14 +62,6 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
 
         if (((FunctionType) fdef.type).returnType instanceof VoidType)
             cg.ret(0, fdef.bytesLocalsSum, ((FunctionType) fdef.type).bytesParamsSum);
-
-        return null;
-    }
-
-    public Void visit(FunctionType type, FuncDefinition param) {
-
-        for (var arg : type.arguments)
-            arg.accept( this, param );
 
         return null;
     }

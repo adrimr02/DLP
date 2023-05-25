@@ -3,15 +3,13 @@ call main
 halt
 ' * Global variables
 ' * Functions
-#line 3
+#FUNC show
+#RET void
+#PARAM a: address
 show:
-' * Parameters
-#line 3
-' * Integer[10] a (offset: 4)
-enter 2
 ' * Local Variables
-#line 4
 ' * Integer i (offset: -2)
+#LOCAL i: int
 enter 2
 #line 5
 #line 5
@@ -32,6 +30,7 @@ jz label2
 pusha bp
 pushi 4
 addi
+loadi
 pusha bp
 pushi -2
 addi
@@ -54,16 +53,16 @@ addi
 storei
 jmp label1
 label2:
-ret 0,2,20
-#line 10
+ret 0,2,2
+#FUNC main
+#RET void
 main:
-' * Parameters
 ' * Local Variables
-#line 11
 ' * Integer[10] list (offset: -20)
+#LOCAL list: 10* Integer
 enter 20
-#line 12
 ' * Integer i (offset: -22)
+#LOCAL i: int
 enter 2
 #line 13
 #line 13

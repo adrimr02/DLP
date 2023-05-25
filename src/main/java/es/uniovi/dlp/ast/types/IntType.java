@@ -98,4 +98,9 @@ public class IntType extends AbstractType {
     return 'i';
   }
 
+  @Override
+  public String getCode() {
+    return "int";
+  }
+
 }

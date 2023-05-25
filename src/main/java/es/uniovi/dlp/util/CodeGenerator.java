@@ -1,7 +1,10 @@
 package es.uniovi.dlp.util;
 
+import es.uniovi.dlp.ast.definitions.FuncDefinition;
+import es.uniovi.dlp.ast.definitions.TypeDefinition;
 import es.uniovi.dlp.ast.types.CharType;
 import es.uniovi.dlp.ast.types.DoubleType;
+import es.uniovi.dlp.ast.types.FunctionType;
 import es.uniovi.dlp.ast.types.Type;
 
 import java.io.IOException;
@@ -219,6 +222,29 @@ public class CodeGenerator {
     public void debugLine(int line) {
         write("#line " + line);
         enter();
+    }
+
+    public void debugType(TypeDefinition tDef) {
+        //write("#TYPE " + tDef.name + " {\n"     + "\t" + tDef.type.);
+        //enter();
+    }
+
+    public void debugGlobalVariable(String ident, Type type) {
+        write("#VAR " + ident + ": " + type.getCode());
+        enter();
+    }
+
+    public void debugLocalVariable(String ident, Type type) {
+        write("#LOCAL " + ident + ": " + type.getCode());
+        enter();
+    }
+
+    public void debugFunction(FuncDefinition fDef) {
+        write("#FUNC " + fDef.name+"\n");
+        write("#RET " + ((FunctionType) fDef.type).returnType.getCode() + "\n");
+        for (var arg : ((FunctionType) fDef.type).arguments) {
+            write("#PARAM " + arg.name + ": " + (arg.isReference ? "address" : arg.type.getCode()) + "\n");
+        }
     }
 
     public void close() {

@@ -83,4 +83,9 @@ public class CharType extends AbstractType {
   public char getSuffix() {
     return 'b';
   }
+
+  @Override
+  public String getCode() {
+    return "byte";
+  }
 }

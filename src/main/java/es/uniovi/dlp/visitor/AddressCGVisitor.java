@@ -27,7 +27,7 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
             cg.pushi(((VarDefinition) exp.definition).offset);
             cg.add('i');
             if (((VarDefinition) exp.definition).isReference) {
-                //cg.load('i');
+                cg.load('i');
             }
         }
 

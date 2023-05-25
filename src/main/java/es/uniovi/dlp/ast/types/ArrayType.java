@@ -52,4 +52,9 @@ public class ArrayType extends AbstractType {
     return size == arrayType.size && Objects.equals( type, arrayType.type );
   }
 
+  @Override
+  public String getCode() {
+    return size + "* " + type;
+  }
+
 }
