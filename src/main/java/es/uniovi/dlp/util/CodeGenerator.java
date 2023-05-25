@@ -225,7 +225,7 @@ public class CodeGenerator {
     }
 
     public void debugType(TypeDefinition tDef) {
-        //write("#TYPE " + tDef.name + " {\n"     + "\t" + tDef.type.);
+        write("#TYPE " + tDef.getCode() + "\n");
         //enter();
     }
 

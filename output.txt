@@ -1,18 +1,25 @@
 #source "input.txt"
 call main
 halt
+' * Type definitions
+#TYPE Persona: {
+	nombre:4* byte
+	edad:int
+	dinero:real
+}
 ' * Global variables
 ' * Functions
 #FUNC show
 #RET void
+#PARAM p: address
 #PARAM a: address
 show:
 ' * Local Variables
 ' * Integer i (offset: -2)
 #LOCAL i: int
 enter 2
-#line 5
-#line 5
+#line 10
+#line 10
 pusha bp
 pushi -2
 addi
@@ -23,24 +30,26 @@ pusha bp
 pushi -2
 addi
 loadi
-pushi 10
+pushi 4
 lti
 jz label2
-#line 6
+#line 11
 pusha bp
-pushi 4
+pushi 6
 addi
 loadi
+pushi 0
+addi
 pusha bp
 pushi -2
 addi
 loadi
-pushi 2
+pushi 1
 muli
 addi
-loadi
-outi
-#line 5
+loadb
+outb
+#line 10
 pusha bp
 pushi -2
 addi
@@ -53,64 +62,111 @@ addi
 storei
 jmp label1
 label2:
-ret 0,2,2
+#line 13
+pushb 10
+outb
+#line 14
+pusha bp
+pushi 6
+addi
+loadi
+pushi 4
+addi
+loadi
+outi
+#line 15
+pusha bp
+pushi 6
+addi
+loadi
+pushi 6
+addi
+loadf
+outf
+ret 0,2,4
 #FUNC main
 #RET void
 main:
 ' * Local Variables
-' * Integer[10] list (offset: -20)
-#LOCAL list: 10* Integer
-enter 20
-' * Integer i (offset: -22)
+' * Record {nombre:Character[4],edad:Integer,dinero:Double} persona (offset: -10)
+#LOCAL persona: Persona
+enter 10
+' * Integer i (offset: -12)
 #LOCAL i: int
 enter 2
-#line 13
-#line 13
+#line 21
 pusha bp
-pushi -22
+pushi -10
 addi
 pushi 0
-storei
-label3:
-pusha bp
-pushi -22
 addi
-loadi
-pushi 10
-lti
-jz label4
-#line 14
-pusha bp
-pushi -20
-addi
-pusha bp
-pushi -22
-addi
-loadi
-pushi 2
+pushi 0
+pushi 1
 muli
 addi
+pushb 65
+storeb
+#line 22
 pusha bp
-pushi -22
+pushi -10
 addi
-loadi
-storei
-#line 13
-pusha bp
-pushi -22
+pushi 0
 addi
-pusha bp
-pushi -22
-addi
-loadi
 pushi 1
+pushi 1
+muli
 addi
-storei
-jmp label3
-label4:
-#line 16
+pushb 100
+storeb
+#line 23
 pusha bp
-pushi -20
+pushi -10
+addi
+pushi 0
+addi
+pushi 2
+pushi 1
+muli
+addi
+pushb 114
+storeb
+#line 24
+pusha bp
+pushi -10
+addi
+pushi 0
+addi
+pushi 3
+pushi 1
+muli
+addi
+pushb 105
+storeb
+#line 25
+pusha bp
+pushi -10
+addi
+pushi 4
+addi
+pushi 20
+storei
+#line 26
+pusha bp
+pushi -10
+addi
+pushi 6
+addi
+pushf 200.0
+storef
+' * Integer[10] a (offset: -32)
+#LOCAL a: 10* int
+enter 20
+#line 28
+pusha bp
+pushi -10
+addi
+pusha bp
+pushi -32
 addi
 call show
-ret 0,22,0
+ret 0,32,0

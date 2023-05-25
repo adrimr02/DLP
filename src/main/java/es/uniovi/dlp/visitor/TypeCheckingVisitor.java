@@ -32,7 +32,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
 
     @Override
     public Boolean visit(VarDefinition def, Type param) {
-        super.visit(def, param);
+        def.type.accept( this, param );
+        //def.type = def.type.get();
         return false;
     }
 
