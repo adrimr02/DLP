@@ -13,7 +13,7 @@ Este proyecto consiste en desarrollar en Java un compilador para una versión si
 - Declaración de variables en cualquier punto ✔
 - Sobrecarga de funciones x
 - Definición de tipos ✔
-- Tipos complejos como parametros y retorno (paso por referencia)
+- Tipos complejos como parametros y retorno (paso por referencia) ✔ (solo paso como parametro)
 - Asignación en declaración
 - Conversión implicita de tipos
 - Sentencias elif

@@ -3,6 +3,8 @@ package es.uniovi.dlp.ast.types;
 import es.uniovi.dlp.ast.AbstractASTNode;
 import es.uniovi.dlp.visitor.Visitor;
 
+import java.util.Objects;
+
 public class RecordField extends AbstractASTNode {
   
   public Type type;
@@ -25,4 +27,16 @@ public class RecordField extends AbstractASTNode {
     return type.toString();
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    RecordField that = (RecordField) o;
+    return Objects.equals(type, that.type) && Objects.equals(name, that.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(type, name);
+  }
 }

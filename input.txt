@@ -1,17 +1,29 @@
 
+typedef Persona struct {
+    nombre: [4]char;
+    edad: int;
+    dinero: double;
+};
 
-def show(a: [10]int) {
+def show(p: Persona,a: [10]int) {
     i: int;
-    for (i=0; i<10; i++) {
-        print a[i];
+    for (i=0; i<4; i++) {
+        print p.nombre[i];
     }
+    print '\n';
+    print p.edad;
+    print p.dinero;
 }
 
 def main() {
-    list: [10]int;
+    persona: Persona;
     i: int;
-    for (i=0; i<10; i++) {
-        list[i] = i;
-    }
-    show(list);
+    persona.nombre[0] = 'A';
+    persona.nombre[1] = 'd';
+    persona.nombre[2] = 'r';
+    persona.nombre[3] = 'i';
+    persona.edad = 20;
+    persona.dinero = 200.0;
+    a: [10]int;
+    show(persona, a);
 }

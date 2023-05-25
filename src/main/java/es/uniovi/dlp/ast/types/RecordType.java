@@ -5,6 +5,7 @@ import es.uniovi.dlp.ast.AbstractASTNode;
 import es.uniovi.dlp.visitor.Visitor;
 
 import java.util.List;
+import java.util.Objects;
 
 public class RecordType extends AbstractType {
 
@@ -48,7 +49,39 @@ public class RecordType extends AbstractType {
 
   @Override
   public String toString() {
-    return "Record";
+    StringBuilder str = new StringBuilder("Record {");
+    for (var field : fields) {
+      str.append(field.name).append(":").append(field).append(",");
+    }
+    if (!fields.isEmpty())
+      str.delete(str.length()-1, str.length());
+
+    str.append("}");
+    return str.toString();
   }
 
+  @Override
+  public String getCode() {
+    StringBuilder str = new StringBuilder("{");
+    for (var field : fields) {
+      str.append("\n\t").append(field.name).append(":").append(field.type.getCode());
+    }
+    if (!fields.isEmpty())
+      str.append("\n");
+    str.append("}");
+    return str.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    RecordType that = (RecordType) o;
+    return Objects.equals(fields, that.fields);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(fields);
+  }
 }

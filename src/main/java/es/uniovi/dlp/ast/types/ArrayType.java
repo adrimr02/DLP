@@ -54,7 +54,7 @@ public class ArrayType extends AbstractType {
 
   @Override
   public String getCode() {
-    return size + "* " + type;
+    return size + "* " + type.getCode();
   }
 
 }

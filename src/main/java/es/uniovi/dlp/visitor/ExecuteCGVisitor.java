@@ -2,6 +2,7 @@ package es.uniovi.dlp.visitor;
 
 import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.ast.definitions.FuncDefinition;
+import es.uniovi.dlp.ast.definitions.TypeDefinition;
 import es.uniovi.dlp.ast.definitions.VarDefinition;
 import es.uniovi.dlp.ast.statements.*;
 import es.uniovi.dlp.ast.types.FunctionType;
@@ -25,6 +26,11 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
         cg.call( "main" );
         cg.halt();
 
+        cg.comment("* Type definitions");
+        for (var def : program.definitions)
+            if (def instanceof TypeDefinition)
+                def.accept( this, param );
+
         cg.comment( "* Global variables" );
         for (var def : program.definitions)
             if (def instanceof VarDefinition)
@@ -35,6 +41,11 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
             if (def instanceof FuncDefinition)
                 def.accept( this, param );
 
+        return null;
+    }
+
+    public Void visit(TypeDefinition tdef, FuncDefinition param) {
+        cg.debugType(tdef);
         return null;
     }
 

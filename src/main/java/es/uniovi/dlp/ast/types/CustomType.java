@@ -136,6 +136,11 @@ public class CustomType extends AbstractType {
     }
 
     @Override
+    public boolean isReferenced() {
+        return type.isReferenced();
+    }
+
+    @Override
     public <PT, RT> RT accept(Visitor<PT, RT> v, PT param) {
         return v.visit(this, param);
     }
@@ -157,5 +162,15 @@ public class CustomType extends AbstractType {
     private void typeIsDefined() {
         if (this.def == null || this.type == null)
             throw new IllegalStateException("Must be associated with a type and its definition");
+    }
+
+    @Override
+    public String toString() {
+        return type.toString();
+    }
+
+    @Override
+    public String getCode() {
+        return name;
     }
 }

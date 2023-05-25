@@ -18,4 +18,8 @@ public class TypeDefinition extends AbstractDefinition {
     public String toString() {
         return "Type definition '" + name + "' of type '" + type + "'";
     }
+
+    public String getCode() {
+        return name + ": " + type.getCode();
+    }
 }
