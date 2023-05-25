@@ -41,7 +41,10 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
     public Void visit(VarDefinition vdef, FuncDefinition param) {
         cg.debugLine(vdef.getLine());
         cg.comment( "* " + vdef);
-        cg.enter(vdef.type.numberOfBytes());
+        if (vdef.isReference)
+            cg.enter(2);
+        else
+            cg.enter(vdef.type.numberOfBytes());
         return null;
     }
 
@@ -240,4 +243,5 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
 
         return null;
     }
+
 }

@@ -26,7 +26,7 @@ public class FunctionType extends AbstractType {
             return new ErrorType( "Too many arguments in function", astNode.getLine(), astNode.getColumn() );
 
         for (int i = 0; i < types.size(); i++) {
-            if (types.get( i ) != arguments.get( i ).type)
+            if (!types.get( i ).equals(arguments.get( i ).type))
                 return new ErrorType( "Invalid type of argument in position '"+i+"'." +
                         " Expected '"+arguments.get( i ).type+"' and found '"+types.get( i )+"'",
                         astNode.getLine(), astNode.getColumn() );

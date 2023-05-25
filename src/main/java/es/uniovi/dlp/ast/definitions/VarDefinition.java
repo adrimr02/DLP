@@ -7,6 +7,7 @@ import es.uniovi.dlp.visitor.Visitor;
 public class VarDefinition extends AbstractDefinition implements Statement {
 
   public int offset;
+  public boolean isReference;
 
   public VarDefinition(String name, Type type, int line, int column) {
     super( type, name, line, column );

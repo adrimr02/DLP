@@ -30,6 +30,7 @@ public class OffSetVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public Void visit(VarDefinition def, Void param) {
         def.type.accept( this, param );
+        def.isReference = false;
         if (def.scope == 0) {
             def.offset = sumOffsetGlobalVariables;
             sumOffsetGlobalVariables += def.type.numberOfBytes();
@@ -92,6 +93,7 @@ public class OffSetVisitor extends AbstractVisitor<Void, Void> {
         for (int i = t.arguments.size() - 1; i >= 0; i--) {
             t.arguments.get( i ).accept( this, param );
             var arg = t.arguments.get(i);
+            arg.isReference = arg.type.isReferenced();
             arg.offset = 4 + paramBytesSum;
             paramBytesSum += arg.type.numberOfBytes();
         }

@@ -3,82 +3,115 @@ call main
 halt
 ' * Global variables
 ' * Functions
-#line 12
+#line 3
+show:
+' * Parameters
+#line 3
+' * Integer[10] a (offset: 4)
+enter 2
+' * Local Variables
+#line 4
+' * Integer i (offset: -2)
+enter 2
+#line 5
+#line 5
+pusha bp
+pushi -2
+addi
+pushi 0
+storei
+label1:
+pusha bp
+pushi -2
+addi
+loadi
+pushi 10
+lti
+jz label2
+#line 6
+pusha bp
+pushi 4
+addi
+pusha bp
+pushi -2
+addi
+loadi
+pushi 2
+muli
+addi
+loadi
+outi
+#line 5
+pusha bp
+pushi -2
+addi
+pusha bp
+pushi -2
+addi
+loadi
+pushi 1
+addi
+storei
+jmp label1
+label2:
+ret 0,2,20
+#line 10
 main:
 ' * Parameters
 ' * Local Variables
+#line 11
+' * Integer[10] list (offset: -20)
+enter 20
+#line 12
+' * Integer i (offset: -22)
+enter 2
 #line 13
-' * es.uniovi.dlp.ast.types.CustomType@12e62005 person1 (offset: -7)
-enter 7
+#line 13
+pusha bp
+pushi -22
+addi
+pushi 0
+storei
+label3:
+pusha bp
+pushi -22
+addi
+loadi
+pushi 10
+lti
+jz label4
 #line 14
 pusha bp
-pushi -7
+pushi -20
 addi
-pushi 0
-addi
-pushi 21
-storei
-#line 16
-' * es.uniovi.dlp.ast.types.CustomType@48fa0f66 class (offset: -149)
-enter 142
-#line 17
 pusha bp
-pushi -149
+pushi -22
 addi
+loadi
 pushi 2
-addi
-pushi 0
-pushi 7
 muli
 addi
-pushi 0
-addi
 pusha bp
-pushi -7
-addi
-pushi 0
+pushi -22
 addi
 loadi
 storei
-#line 19
-pushb 109
-outb
-#line 20
-pushb 97
-outb
-#line 21
-pushb 105
-outb
-#line 22
-pushb 110
-outb
-#line 24
+#line 13
 pusha bp
-pushi -7
+pushi -22
 addi
-pushi 0
+pusha bp
+pushi -22
 addi
 loadi
-outi
-#line 25
-pusha bp
-pushi -149
-addi
-pushi 2
-addi
-pushi 0
-pushi 7
-muli
-addi
-pushi 0
-addi
-loadi
-outi
-#line 27
 pushi 1
-pushi 2
-pushi 3
-muli
 addi
-outi
-ret 0,149,0
+storei
+jmp label3
+label4:
+#line 16
+pusha bp
+pushi -20
+addi
+call show
+ret 0,22,0

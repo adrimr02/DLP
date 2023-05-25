@@ -1,28 +1,17 @@
-typedef Person struct {
-    age: int;
-    sex: char;
-    money: double;
-};
 
-typedef Class struct {
-    id: int;
-    people: [20]Person;
-};
+
+def show(a: [10]int) {
+    i: int;
+    for (i=0; i<10; i++) {
+        print a[i];
+    }
+}
 
 def main() {
-    person1: Person;
-    person1.age = 21;
-
-    class: Class;
-    class.people[0].age = person1.age;
-
-    print 'm';
-    print 'a';
-    print 'i';
-    print 'n';
-
-    print person1.age;
-    print class.people[0].age;
-
-    print  1 + 2 * 3;
+    list: [10]int;
+    i: int;
+    for (i=0; i<10; i++) {
+        list[i] = i;
+    }
+    show(list);
 }

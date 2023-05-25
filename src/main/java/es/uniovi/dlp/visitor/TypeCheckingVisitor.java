@@ -303,14 +303,4 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
         return super.visit(t, param);
     }
 
-    @Override
-    public Boolean visit(FunctionType t, Type param) {
-        for (var arg : t.arguments) {
-            arg.accept( this, param );
-            arg.type.asBuiltInType( t );
-        }
-        t.returnType.accept( this, param );
-
-        return null;
-    }
 }

@@ -12,9 +12,10 @@ import es.uniovi.dlp.visitor.OffSetVisitor;
 import es.uniovi.dlp.visitor.TypeCheckingVisitor;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorView;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 	
@@ -26,6 +27,8 @@ public class Main {
 
 		System.out.println("Compiling " + args[0] + " into " + args[1] + "...");
 
+		List<Exception> errors = new ArrayList<>();
+
 		// create a lexer that feeds off of input CharStream
 		CharStream input = CharStreams.fromFileName(args[0]);
 		PmmLexer lexer = new PmmLexer(input);
@@ -33,14 +36,22 @@ public class Main {
 		// create a parser that feeds off the tokens buffer
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		PmmParser parser = new PmmParser(tokens);
+		parser.addErrorListener(new BaseErrorListener() {
+			@Override
+			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+				errors.add(e);
+				super.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
+			}
+		});
 		ASTNode ast = parser.program().ast;
 
 		ast.accept(new IdentificationVisitor(), null);
 		ast.accept(new TypeCheckingVisitor(),null);
 
 		// * Check errors
-		if(ErrorHandler.getInstance().anyError()){
+		if(ErrorHandler.getInstance().anyError() || !errors.isEmpty()){
 			// * Show errors
+			System.out.println("Could not compile due to the following errors:");
 			ErrorHandler.getInstance().showErrors(System.err);
 		}
 		else{

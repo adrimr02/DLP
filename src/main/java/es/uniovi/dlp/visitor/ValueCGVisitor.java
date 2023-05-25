@@ -2,6 +2,7 @@ package es.uniovi.dlp.visitor;
 
 import com.sun.jdi.DoubleType;
 import es.uniovi.dlp.ast.definitions.FuncDefinition;
+import es.uniovi.dlp.ast.definitions.VarDefinition;
 import es.uniovi.dlp.ast.expressions.*;
 import es.uniovi.dlp.ast.statements.Function;
 import es.uniovi.dlp.ast.statements.IfElse;
@@ -170,7 +171,10 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Function stmt, Void param) {
         for (var arg : stmt.params) {
-            arg.accept( this, param );
+            if (arg instanceof Variable && ((VarDefinition)((Variable) arg).definition).type.isReferenced())
+                arg.accept(av, param);
+            else
+                arg.accept( this, param );
         }
         cg.call( stmt.var.name );
         return null;

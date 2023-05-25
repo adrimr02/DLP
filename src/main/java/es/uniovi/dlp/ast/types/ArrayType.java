@@ -24,7 +24,15 @@ public class ArrayType extends AbstractType {
       return new ErrorType( "Array index must be of type integer", astNode.getLine(), astNode.getColumn() );
   }
 
+  @Override
+  public boolean isReferenced() {
+    return true;
+  }
 
+  @Override
+  public int numberOfBytes() {
+    return type.numberOfBytes() * size;
+  }
 
   @Override
   public <PT, RT> RT accept(Visitor<PT, RT> v, PT param) {
@@ -33,12 +41,7 @@ public class ArrayType extends AbstractType {
 
   @Override
   public String toString() {
-    return "Array[" + type + "]";
-  }
-
-  @Override
-  public int numberOfBytes() {
-    return type.numberOfBytes() * size;
+    return type + "[" + size + "]";
   }
 
   @Override

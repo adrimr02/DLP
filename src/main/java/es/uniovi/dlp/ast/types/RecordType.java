@@ -37,6 +37,11 @@ public class RecordType extends AbstractType {
   }
 
   @Override
+  public boolean isReferenced() {
+    return true;
+  }
+
+  @Override
   public <PT, RT> RT accept(Visitor<PT, RT> v, PT param) {
     return v.visit( this, param );
   }

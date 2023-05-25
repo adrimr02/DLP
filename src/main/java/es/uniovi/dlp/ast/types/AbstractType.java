@@ -130,4 +130,9 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
         return new ErrorType(this + " is not a numerical type", astNode.getLine(), astNode.getColumn());
     }
+
+    @Override
+    public boolean isReferenced() {
+        return false;
+    }
 }

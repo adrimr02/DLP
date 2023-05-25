@@ -29,4 +29,6 @@ public interface Type extends ASTNode {
 
     char getSuffix();
 
+    boolean isReferenced();
+
 }
