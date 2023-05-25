@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Function extends AbstractASTNode implements Statement, Expression {
 
-  public List<Expression> params;
+  public List<Expression> arguments;
   public Variable var;
   public boolean isLValue;
   public Type type;
@@ -18,7 +18,7 @@ public class Function extends AbstractASTNode implements Statement, Expression {
   public Function(Variable var, List<Expression> params, int line, int column) {
     super( line, column );
     this.var = var;
-    this.params = params;
+    this.arguments = params;
   }
 
   @Override

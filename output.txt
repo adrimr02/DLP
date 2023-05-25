@@ -1,318 +1,278 @@
-#source "input.1.txt"
+#source "input.txt"
 call main
 halt
 ' * Global variables
-' * Array[Double] v (offset: 0)
+' * Integer i (offset: 0)
+' * Integer j (offset: 2)
+' * Integer n (offset: 4)
+' * Character c (offset: 6)
+' * Double d (offset: 7)
 ' * Functions
-main:
+p:
 ' * Parameters
 ' * Local Variables
-#line 5
-' * Double value (offset: -4)
-#line 6
-' * Integer i (offset: -6)
-#line 6
-' * Integer j (offset: -8)
-#line 7
-' * Array[Array[Integer]] w (offset: -48)
-#line 8
-' * Record date (offset: -54)
-enter 54
+ret 0,0,0
+f:
+' * Parameters
+' * Integer n (offset: 8)
+' * Double r (offset: 4)
+' * Local Variables
+#line 9
+' * Double real (offset: -4)
+#line 10
+' * Character c1 (offset: -5)
+#line 10
+' * Character c2 (offset: -6)
+enter 6
+#line 11
+pusha bp
+pushi -5
+addi
+pusha bp
+pushi 8
+addi
+loadi
+i2b
+storeb
 #line 12
-pusha bp
-pushi -54
-addi
-pushi 0
-addi
-ini
-storei
-#line 13
-pusha bp
-pushi -54
-addi
-pushi 4
-addi
-pushb 97
-b2i
-storei
-#line 14
-pusha bp
-pushi -54
-addi
-pushi 2
-addi
-pusha bp
-pushi -54
-addi
-pushi 0
-addi
-loadi
-pusha bp
-pushi -54
-addi
-pushi 4
-addi
-loadi
-muli
-pushi 12
-modi
-pushi 1
-addi
-storei
-#line 15
-pusha bp
-pushi -54
-addi
-pushi 0
-addi
-loadi
-outi
-#line 15
-pushb 10
-outb
-#line 15
-pusha bp
-pushi -54
-addi
-pushi 2
-addi
-loadi
-outi
-#line 15
-pushb 10
-outb
-#line 15
-pusha bp
-pushi -54
-addi
-pushi 4
-addi
-loadi
-i2f
-outf
-#line 15
-pushb 10
-outb
-#line 17
 pusha bp
 pushi -4
 addi
-inf
-storef
-#line 19
 pusha bp
-pushi -6
+pushi -5
 addi
+loadb
+b2i
+i2f
+pusha bp
+pushi 8
+addi
+loadi
+i2f
+addf
+pusha bp
+pushi 4
+addi
+loadf
+addf
+storef
+#line 13
+call p
+#line 14
+pusha bp
+pushi -5
+addi
+loadb
+b2i
+ret 2,6,6
+main:
+' * Parameters
+' * Local Variables
+#line 23
+' * Record pair (offset: -3)
+#line 29
+' * Array[Array[Integer]] vector (offset: -103)
+enter 103
+#line 31
+pusha 0
 pushi 0
 storei
-#line 20
+#line 32
+pusha 2
+pushi 0
+storei
+#line 33
 label1:
-pusha bp
-pushi -6
-addi
+pusha 0
 loadi
 pushi 10
 lti
 jz label2
-#line 21
-pusha 0
-pusha bp
-pushi -6
-addi
+#line 34
+label3:
+pusha 2
 loadi
-pushi 4
+pushi 5
+lti
+jz label4
+#line 35
+pusha bp
+pushi -103
+addi
+pusha 0
+loadi
+pushi 10
 muli
 addi
-pusha bp
-pushi -4
-addi
-loadf
-storef
-#line 22
-pusha bp
-pushi -6
-addi
-loadi
-outi
-#line 22
-pushb 58
-outb
-#line 22
-pusha 0
-pusha bp
-pushi -6
-addi
-loadi
-pushi 4
-muli
-addi
-loadf
-outf
-#line 22
-pushb 32
-outb
-#line 23
-pusha bp
-pushi -6
-addi
+pusha 2
 loadi
 pushi 2
-modi
-jz label3
-#line 24
-pushb 111
-outb
-#line 24
-pushb 100
-outb
-#line 24
-pushb 100
-outb
-#line 24
-pushb 10
-outb
-jmp label4
-label3:
-#line 26
-pushb 101
-outb
-#line 26
-pushb 118
-outb
-#line 26
-pushb 101
-outb
-#line 26
-pushb 110
-outb
-#line 26
-pushb 10
-outb
+muli
+addi
+pusha 0
+loadi
+pusha 2
+loadi
+addi
+storei
+#line 36
+pusha 2
+pusha 2
+loadi
+pushi 1
+addi
+storei
+jmp label3
 label4:
-#line 27
-pusha bp
-pushi -6
-addi
-pusha bp
-pushi -6
-addi
+#line 38
+pusha 0
+pusha 0
 loadi
 pushi 1
 addi
 storei
 jmp label1
 label2:
-#line 29
-pushb 10
-outb
-#line 31
-pusha bp
-pushi -6
-addi
+#line 41
+pusha 0
 pushi 0
 storei
-#line 32
+#line 42
+pusha bp
+pushi -3
+addi
+pushi 2
+addi
+pushb 48
+storeb
+#line 43
+pusha bp
+pushi -3
+addi
+pushi 0
+addi
+pushi 48
+storei
+#line 44
 label5:
 pusha bp
-pushi -6
-addi
-loadi
-pushi 4
-lti
-jz label6
-#line 33
-pusha bp
-pushi -8
+pushi -3
 addi
 pushi 0
-storei
-#line 34
-label7:
-pusha bp
-pushi -8
 addi
 loadi
-pushi 5
-lti
-jz label8
-#line 35
+pusha 0
+loadi
+gei
+jz label6
+#line 45
 pusha bp
-pushi -48
+pushi -3
 addi
-pusha bp
-pushi -6
+pushi 0
 addi
 loadi
+pusha bp
+pushi -103
+addi
+pushi 0
 pushi 10
 muli
 addi
-pusha bp
-pushi -8
-addi
-loadi
-pushi 2
-muli
-addi
-pusha bp
-pushi -6
-addi
-loadi
-pusha bp
-pushi -8
-addi
-loadi
-addi
-storei
-#line 36
-pusha bp
-pushi -48
-addi
-pusha bp
-pushi -6
-addi
-loadi
-pushi 10
-muli
-addi
-pusha bp
-pushi -8
-addi
-loadi
+pushi 0
 pushi 2
 muli
 addi
 loadi
-outi
-#line 36
-pushb 32
+eqi
+pusha bp
+pushi -3
+addi
+pushi 2
+addi
+loadb
+b2i
+not
+or
+pusha 0
+loadi
+pushi 2
+modi
+pushi 0
+eqi
+or
+jz label7
+#line 46
+pushb 116
 outb
-#line 37
-pusha bp
-pushi -8
-addi
-pusha bp
-pushi -8
-addi
-loadi
-pushi 1
-addi
-storei
-jmp label7
-label8:
-#line 39
+#line 46
+pushb 114
+outb
+#line 46
+pushb 117
+outb
+#line 46
+pushb 101
+outb
+#line 46
 pushb 10
 outb
-#line 40
-pusha bp
-pushi -6
-addi
-pusha bp
-pushi -6
-addi
+jmp label8
+label7:
+#line 48
+pushb 102
+outb
+#line 48
+pushb 97
+outb
+#line 48
+pushb 108
+outb
+#line 48
+pushb 115
+outb
+#line 48
+pushb 101
+outb
+#line 48
+pushb 10
+outb
+label8:
+#line 49
+pusha 0
+pusha 0
 loadi
 pushi 1
 addi
 storei
 jmp label5
 label6:
-ret 0,54,0
+#line 51
+pusha 0
+loadi
+pusha 0
+loadi
+i2f
+call f
+outi
+#line 52
+pusha bp
+pushi -103
+addi
+pushi 9
+pushi 10
+muli
+addi
+pushf 4.3
+f2i
+pushi 2
+muli
+addi
+pushi 5
+storei
+#line 53
+pushi 1
+pushf 2.2
+call f
+popi
+ret 0,103,0

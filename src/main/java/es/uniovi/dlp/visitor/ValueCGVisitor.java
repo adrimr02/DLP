@@ -141,7 +141,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(Function stmt, Void param) {
-        for (var arg : stmt.params) {
+        for (var arg : stmt.arguments) {
             arg.accept( this, param );
         }
         cg.call( stmt.var.name );

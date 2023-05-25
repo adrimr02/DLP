@@ -50,14 +50,14 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
 
         int lvSize = 0;
 
-        for (var def : fdef.defs) {
+        for (var def : fdef.definitions) {
             cg.debugLine(def.getLine());
             def.accept( this, fdef );
         }
 
-        if (fdef.defs.size() > 0) {
-            cg.enter( -fdef.defs.get( fdef.defs.size() -1 ).offset );
-            lvSize = -fdef.defs.get( fdef.defs.size() -1 ).offset;
+        if (fdef.definitions.size() > 0) {
+            cg.enter( -fdef.definitions.get( fdef.definitions.size() -1 ).offset );
+            lvSize = -fdef.definitions.get( fdef.definitions.size() -1 ).offset;
         }
 
         for (var stmt :  fdef.statements) {

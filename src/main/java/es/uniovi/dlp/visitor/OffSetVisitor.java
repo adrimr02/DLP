@@ -15,7 +15,7 @@ public class OffSetVisitor extends AbstractVisitor<Void, Void> {
         fDef.type.accept( this, param );
 
         sumOffsetLocalVariables = 0;
-        for (var def : fDef.defs)
+        for (var def : fDef.definitions)
             def.accept( this, param );
 
         for (var def : fDef.statements)

@@ -20,7 +20,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
 
         boolean hasReturn = false;
 
-        for (var def : fDef.defs)
+        for (var def : fDef.definitions)
             def.accept( this, param );
 
         for (var stmt : fDef.statements)
@@ -117,7 +117,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Boolean>{
         stmt.var.accept( this, param );
         List<Type> paramTypes = new ArrayList<>();
 
-        for (var p : stmt.params) {
+        for (var p : stmt.arguments) {
             p.accept( this, param );
             paramTypes.add( p.getType() );
         }
