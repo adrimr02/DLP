@@ -82,7 +82,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
         cg.debugLine(stmt.getLine());
         stmt.left.accept( this.av, null );
         stmt.right.accept( this.vv, null );
-
+        cg.convert( stmt.right.getType(), stmt.left.getType() );
         cg.store(stmt.left.getType().getSuffix());
 
         return null;
@@ -160,7 +160,8 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<FuncDefinition, Void> {
     public Void visit(Return stmt, FuncDefinition param) {
         cg.debugLine(stmt.getLine());
         stmt.returnValue.accept(vv, null);
-        cg.ret( stmt.returnValue.getType().numberOfBytes(), param.bytesLocalsSum, ((FunctionType)param.type).bytesParamsSum);
+        cg.convert( stmt.returnValue.getType(), ((FunctionType)param.type).returnType);
+        cg.ret( ((FunctionType)param.type).returnType.numberOfBytes(), param.bytesLocalsSum, ((FunctionType)param.type).bytesParamsSum);
         return null;
     }
 }

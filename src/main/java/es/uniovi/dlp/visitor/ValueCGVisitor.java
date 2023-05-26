@@ -18,12 +18,9 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Arithmetic exp, Void param) {
         exp.left.accept(this, param);
-        if (exp.left.getType() instanceof CharType)
-            cg.convert( exp.left.getType(), IntType.get() );
-
+        cg.convert( exp.left.getType(), exp.getType() );
         exp.right.accept(this, param);
-        if (exp.right.getType() instanceof CharType)
-            cg.convert( exp.right.getType(), IntType.get() );
+        cg.convert( exp.right.getType(), exp.getType() );
 
         switch (exp.operator) {
             case "+" -> cg.add(exp.type.getSuffix());
@@ -38,16 +35,19 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(Comparison exp, Void param) {
+        var newType = exp.left.getType().arithmetic( exp.right.getType(), exp );
         exp.left.accept(this, param);
+        cg.convert( exp.left.getType(), newType );
         exp.right.accept(this, param);
+        cg.convert( exp.right.getType(), newType );
 
         switch (exp.operator) {
-            case "<" -> cg.lt(exp.type.getSuffix());
-            case "<=" -> cg.le(exp.type.getSuffix());
-            case "==" -> cg.eq(exp.type.getSuffix());
-            case ">=" -> cg.ge(exp.type.getSuffix());
-            case ">" -> cg.gt(exp.type.getSuffix());
-            case "!=" -> cg.ne(exp.type.getSuffix());
+            case "<" -> cg.lt(newType.getSuffix());
+            case "<=" -> cg.le(newType.getSuffix());
+            case "==" -> cg.eq(newType.getSuffix());
+            case ">=" -> cg.ge(newType.getSuffix());
+            case ">" -> cg.gt(newType.getSuffix());
+            case "!=" -> cg.ne(newType.getSuffix());
         }
 
         return null;
@@ -141,8 +141,10 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(Function stmt, Void param) {
-        for (var arg : stmt.arguments) {
-            arg.accept( this, param );
+        for (int i = 0; i < stmt.arguments.size(); i++) {
+            stmt.arguments.get( i ).accept( this, param );
+            cg.convert( stmt.arguments.get( i ).getType(),
+                    ((FunctionType)stmt.var.definition.getType()).arguments.get( i ).type );
         }
         cg.call( stmt.var.name );
         return null;

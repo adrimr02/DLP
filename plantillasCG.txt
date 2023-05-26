@@ -29,17 +29,19 @@ execute[[FunctionType: type -> type1 vardefinition*]]() =
 
 execute[[Print: statement -> expression]]() =
     value[[expression]]()
-    <out> expression.type.suffix()
+    <out> expression.type.getSuffix()
 
 execute[[Input: statement -> expression]]() =
     address[[expression]]()
-    <in> expression.type.suffix()
-    <store> expression.type.suffix()
+    <in> expression.type.getSuffix()
+    <store> expression.type.getSuffix()
 
 execute[[Assignment: statement -> expression1 expression2]]() =
     address[[expression1]]
+    if (expression1.type != expression2.type)
+        expression2.type.getSuffix()<2>expression1.type.getSuffix()
     value[[expression2]]
-    <store> expression2.type.suffix()
+    <store> expression2.type.getSuffix()
 
 
 execute[[WhileStatement: statement -> expression statement*]]() =
@@ -68,10 +70,12 @@ execute[[IfElseStatement: statement -> expression statement1* statement2*]]() =
 execute[[Function: statement -> expression1 expression2*]]() =
     value[[(Expression)statement]]()
     if (!(Expression) statement.type instanceof VoidType))
-        <pop> ((Expression) statement).type.suffix()
+        <pop> ((Expression) statement).type.getSuffix()
 
 execute[[Return: statement -> expression]](funcdefinition) =
     value[[expression]]()
+    if (funcdefinition.type.returnType != expression.type)
+            expression.type.getSuffix()<2>funcdefinition.type.returnType.getSuffix()
     <ret> funcdefinition.type.returnType.numberOfBytes() <,>
           funcdefinition.bytesLocalsSum() <,>
           funcdefinition.type.bytesParamsSum()
@@ -98,7 +102,7 @@ address[[FieldAccess: expression1 -> expression2 ID]]() =
 
 value[[Variable: expression -> ID]]() =
     address[[expression]]()
-    <load> expression.type.suffix()
+    <load> expression.type.getSuffix()
 
 value[[IntLiteral: expression -> INT_CONSTANT]]() =
     <pushi> INT_CONSTANT
@@ -109,53 +113,62 @@ value[[DoubleLiteral: expression -> REAL_CONSTANT]]() =
 value[[CharLiteral: expression -> CHAR_CONSTANT]]() =
     <pushb> CHAR_CONSTANT
 
-value[[Arithmetic: expression -> expression1 (+|-|*|/|%) expression2]]() =
-    value[[expression1]]()
+value[[Arithmetic: expression1 -> expression2 (+|-|*|/|%) expression3]]() =
     value[[expression2]]()
-    switch (expression.operator) {
+    if (expression1.type != expression2.type)
+        expression2.type.getSuffix()<2>expression1.type.getSuffix()
+    value[[expression3]]()
+    if (expression1.type != expression3.type)
+        expression3.type.getSuffix()<2>expression1.type.getSuffix()
+    switch (expression1.operator) {
         case "+":
-            <add> expression.type.suffix()
+            <add> expression1.type.getSuffix()
             break;
         case "-":
-            <sub> expression.type.suffix()
+            <sub> expression1.type.getSuffix()
             break;
         case "*":
-            <mul> expression.type.suffix()
+            <mul> expression1.type.getSuffix()
             break;
         case "/":
-            <div> expression.type.suffix()
+            <div> expression1.type.getSuffix()
             break;
         case "%":
-            <mod> expression.type.suffix()
+            <mod> expression1.type.getSuffix()
             break;
     }
 
 value[[UnaryMinus: expression1 -> expression2]]() =
-    <push> expression1.type.suffix() <0>
+    <push> expression1.type.getSuffix() <0>
     value[[expression2]]()
-    <sub> expression1.type.suffix()
+    <sub> expression1.type.getSuffix()
 
-value[[Comparison: expression -> expression1 (<|<=|==|>=|>|!=) expression2]]() =
-    value[[expression1]]()
+value[[Comparison: expression1 -> expression2 (<|<=|==|>=|>|!=) expression3]]() =
+    Type newType = expression2.type.arithmetic(expression3.type);
     value[[expression2]]()
-    switch (expression.operator) {
+    if (newType != expression2.type)
+        expression2.type.getSuffix()<2>newType.getSuffix()
+    value[[expression3]]()
+    if (newType != expression3.type)
+        expression3.type.getSuffix()<2>newType.getSuffix()
+    switch (expression1.operator) {
         case "<":
-            <lt> expression.type.suffix()
+            <lt> newType.getSuffix()
             break;
         case "<=":
-            <le> expression.type.suffix()
+            <le> newType.getSuffix()
             break;
         case "==":
-            <eq> expression.type.suffix()
+            <eq> newType.getSuffix()
             break;
         case ">=":
-            <ge> expression.type.suffix()
+            <ge> newType.getSuffix()
             break;
         case ">":
-            <gt> expression.type.suffix()
+            <gt> newType.getSuffix()
             break;
         case "!=":
-            <ne> expression.type.suffix()
+            <ne> newType.getSuffix()
             break;
     }
 
@@ -177,16 +190,20 @@ value[[Not: expression -> expression1]]() =
 
 value[[Cast: expression -> type expression1]]() =
     value[[expression1]]()
-    expression1.type.suffix()<2>type.suffix()
+    expression1.type.suffix()<2>type.getSuffix()
 
 value[[ArrayAccess: expression1 -> expression2 expression3]]() =
     address[[expression1]]()
-    <load> expression.type.suffix()
+    <load> expression.type.getSuffix()
 
 value[[Access: expression1 -> expression2 expression3]]() =
     address[[expression1]]()
-    <load> expression.type.suffix()
+    <load> expression.type.getSuffix()
 
 value[[Function: expression1 -> expression2 expression3*]]() =
-    expression3*.foreach(exp -> value[[exp]]())
+    for (int i = 0; i < stmt.arguments.size(); i++) {
+        value[[ expression3*[i] ]]()
+        if (stmt.var.definition.getType().arguments.get( i ).type != stmt.arguments.get( i ).getType())
+            stmt.arguments.get( i ).getType().getSuffix()<2>stmt.var.definition.getType().arguments.get( i ).type.getSuffix()
+    }
     <call> expression2.name

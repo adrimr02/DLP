@@ -60,10 +60,11 @@ Types (if case not present -> error):
 A           C           L           Cast
 i i -> i    i i -> i    i i -> i    i i -> i
 d d -> d    d d -> i                i d -> d
-c c -> c    c c -> i                i c -> c
+c c -> i    c c -> i                i c -> c
                                     d i -> i
-                                    d d -> d
-                                    d c -> c
-                                    c i -> i
-                                    c d -> d
-                                    c c -> c
+i d -> d    i d -> i                d d -> d
+i c -> i    i c -> i                d c -> c
+d i -> d    d i -> i                c i -> i
+d c -> d    d c -> i                c d -> d
+c i -> i    c i -> i                c c -> c
+c d -> d    c d -> i

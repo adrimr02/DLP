@@ -43,7 +43,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     @Override
     public Type arithmetic(ASTNode astNode) {
-        return new ErrorType(this + " does not support comparisons", astNode.getLine(), astNode.getColumn());
+        return new ErrorType(this + " does not support arithmetics", astNode.getLine(), astNode.getColumn());
     }
 
     @Override

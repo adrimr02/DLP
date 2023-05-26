@@ -27,9 +27,9 @@ public class CharType extends AbstractType {
 
   @Override
   public Type arithmetic(Type type, ASTNode astNode) {
-    if (type instanceof CharType)
+    if (type instanceof CharType )
       return IntType.get();
-    else if (type instanceof ErrorType)
+    else if (type instanceof DoubleType || type instanceof IntType || type instanceof ErrorType)
       return type;
     else
       return new ErrorType( "Arithmetic operator cannot be applied to 'Char' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
@@ -37,7 +37,7 @@ public class CharType extends AbstractType {
 
   @Override
   public Type comparison(Type type, ASTNode astNode) {
-    if (type instanceof DoubleType)
+    if (type instanceof CharType || type instanceof IntType || type instanceof DoubleType)
       return IntType.get();
     else if (type instanceof ErrorType)
       return type;
@@ -55,7 +55,7 @@ public class CharType extends AbstractType {
 
   @Override
   public Type promotesTo(Type type, ASTNode astNode) {
-    if (type instanceof CharType || type instanceof ErrorType)
+    if (type instanceof CharType || type instanceof IntType || type instanceof DoubleType || type instanceof ErrorType)
       return type;
 
     return new ErrorType(this + " is not assignable to " + type, astNode.getLine(), astNode.getColumn());

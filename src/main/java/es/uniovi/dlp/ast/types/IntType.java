@@ -27,7 +27,11 @@ public class IntType extends AbstractType {
 
   @Override
   public Type arithmetic(Type type, ASTNode astNode) {
-    if (type instanceof IntType || type instanceof ErrorType)
+    if (type instanceof CharType || type instanceof IntType)
+      return this;
+    else if (type instanceof DoubleType)
+      return type;
+    else if (type instanceof ErrorType)
       return type;
     else
       return new ErrorType( "Arithmetic operator cannot be applied to 'Integer' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
@@ -40,7 +44,9 @@ public class IntType extends AbstractType {
 
   @Override
   public Type comparison(Type type, ASTNode astNode) {
-    if (type instanceof IntType || type instanceof ErrorType)
+    if (type instanceof CharType || type instanceof IntType || type instanceof DoubleType)
+      return this;
+    else if (type instanceof ErrorType)
       return type;
     else
       return new ErrorType( "Comparison operator cannot be applied to 'Integer' and '" + type + "'", astNode.getLine(), astNode.getColumn() );
@@ -69,7 +75,11 @@ public class IntType extends AbstractType {
 
   @Override
   public Type promotesTo(Type type, ASTNode astNode) {
-    if (type instanceof IntType || type instanceof ErrorType)
+    if (type instanceof IntType)
+        return this;
+    else if (type instanceof DoubleType)
+      return DoubleType.get();
+    else if (type instanceof ErrorType)
         return type;
 
     return new ErrorType(this + " is not assignable to " + type, astNode.getLine(), astNode.getColumn());
